@@ -510,7 +510,7 @@
   }
 
   .location-map__marker {
-    left: 47%;
+    left: 63.5%;
     gap: 3px;
     scale: 0.78;
     transform-origin: left center;
@@ -942,7 +942,7 @@
   }
 
   .location-map__marker {
-    left: 43%;
+    left: 63.5%;
     scale: 0.72;
   }
 

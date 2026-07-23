@@ -119,20 +119,21 @@
 }
 
 .location-map__districts .location-map__river-name {
-  fill: rgba(124, 180, 148, 0.34);
-  font-size: 8px;
-  letter-spacing: 0.5em;
+  fill: rgba(167, 214, 184, 0.58);
+  font-size: 11px;
+  letter-spacing: 0.46em;
+  filter: drop-shadow(0 0 4px rgba(141, 255, 53, 0.16));
 }
 
 .location-map__marker {
   position: absolute;
   z-index: 5;
-  top: 55.6%;
-  left: 63.4%;
+  top: 68.4%;
+  left: 68.4%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transform: translate(-10px, -50%);
+  gap: 0;
+  transform: translate(-50%, -50%);
 }
 
 .location-map__marker-radar {
@@ -171,7 +172,9 @@
 }
 
 .location-map__marker-copy {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  right: 30px;
   display: flex;
   flex-direction: column;
   min-width: 174px;
@@ -182,6 +185,7 @@
   background: rgba(4, 12, 8, 0.8);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.48), inset 0 1px rgba(255, 255, 255, 0.045), 0 0 26px rgba(141, 255, 53, 0.08);
   backdrop-filter: blur(14px) saturate(120%);
+  transform: translateY(-50%);
 }
 
 .location-map__marker-copy::before {
@@ -262,7 +266,12 @@
     font-size: 15px;
     letter-spacing: 0.34em;
   }
-  .location-map__marker { top: 56%; left: 52%; gap: 4px; transform: translate(-10px, -50%) scale(0.84); transform-origin: left center; }
+  .location-map__marker {
+    top: 66.25%;
+    left: 72%;
+    gap: 0;
+    transform: translate(-50%, -50%);
+  }
   .location-map__marker-copy { min-width: 150px; padding: 10px 11px 11px; }
   .location-map__marker-copy strong { font-size: 10px; }
   .location-map__coordinates { right: 20px; bottom: 18px; font-size: 8px; }

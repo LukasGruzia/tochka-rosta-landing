@@ -99,18 +99,18 @@ export default function LocationMap({ className = '' }: LocationMapProps) {
 
         <motion.path
           className="location-map__river-shadow"
-          d="M40 178c80-10 101 70 181 69 89-2 112-82 203-47 79 31 112 113 202 92 47-11 72-43 112-28"
+          d="M18 112C82 72 138 93 150 146c9 40-38 60-15 102 31 56 111 13 168-13 55-24 107-16 156 13 60 35 118 18 165-4 46-21 88-18 124 0"
           {...lineMotion(0.08, 1.8)}
         />
         <motion.path
           className="location-map__river"
-          d="M40 178c80-10 101 70 181 69 89-2 112-82 203-47 79 31 112 113 202 92 47-11 72-43 112-28"
+          d="M18 112C82 72 138 93 150 146c9 40-38 60-15 102 31 56 111 13 168-13 55-24 107-16 156 13 60 35 118 18 165-4 46-21 88-18 124 0"
           stroke={`url(#${riverGradientId})`}
           {...lineMotion(0.1, 1.8)}
         />
         <motion.path
           className="location-map__river-light"
-          d="M40 175c80-10 101 70 181 69 89-2 112-82 203-47 79 31 112 113 202 92 47-11 72-43 112-28"
+          d="M18 109C82 69 138 90 150 143c9 40-38 60-15 102 31 56 111 13 168-13 55-24 107-16 156 13 60 35 118 18 165-4 46-21 88-18 124 0"
           {...lineMotion(0.2, 1.9)}
         />
 
@@ -132,13 +132,13 @@ export default function LocationMap({ className = '' }: LocationMapProps) {
 
         <motion.path
           className="location-map__route"
-          d="M142 478c41-66 106-67 159-104 49-34 70-86 132-74 18 3 32 10 49 18"
+          d="M142 478c55-58 112-66 166-90 58-25 104-61 156-34 18 9 34 30 56 51"
           stroke={`url(#${routeGradientId})`}
           {...lineMotion(0.48, 1.55)}
         />
         <motion.circle
-          cx="482"
-          cy="318"
+          cx="520"
+          cy="405"
           r="5.5"
           fill="#8dff35"
           filter={`url(#${markerGlowId})`}
@@ -146,14 +146,14 @@ export default function LocationMap({ className = '' }: LocationMapProps) {
           whileInView={{ scale: 1 }}
           viewport={{ once: false, amount: 0.35 }}
           transition={{ duration: reduceMotion ? 0 : 0.55, delay: reduceMotion ? 0 : 1.15, ease: [0.16, 1, 0.3, 1] }}
-          style={{ transformOrigin: '482px 318px' }}
+          style={{ transformOrigin: '520px 405px' }}
         />
 
         <g className="location-map__districts" aria-hidden="true">
-          <text className="location-map__district location-map__district--zareka" x="176" y="145">ЗАРЕКА</text>
-          <text className="location-map__district location-map__district--center" x="245" y="365">ЦЕНТР</text>
+          <text className="location-map__district location-map__district--zareka" x="170" y="145">ЗАРЕКА</text>
+          <text className="location-map__district location-map__district--center" x="300" y="335">ЦЕНТР</text>
           <text x="523" y="445">ВОСТОЧНЫЙ</text>
-          <text className="location-map__river-name" x="80" y="201">Т У Р А</text>
+          <text className="location-map__river-name" x="350" y="239">Т У Р А</text>
         </g>
       </svg>
 
