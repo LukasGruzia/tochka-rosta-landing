@@ -1,0 +1,999 @@
+/*
+ * Mobile-only finishing layer.
+ * The desktop composition remains controlled by the original section styles.
+ */
+@media (max-width: 767px) {
+  html,
+  body,
+  #root,
+  .landing-shell {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .landing-shell,
+  .landing-shell main,
+  .landing-shell section {
+    min-width: 0;
+  }
+
+  .landing-shell img,
+  .landing-shell svg {
+    max-width: 100%;
+  }
+
+  .container,
+  .landing-shell .container {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  .section {
+    padding-block: 78px;
+  }
+
+  .section-heading,
+  .ecosystem-heading,
+  .interactive-how__heading,
+  .user-journey__heading {
+    max-width: 100%;
+    margin-bottom: 38px;
+  }
+
+  .section-heading--center,
+  .section-index--center {
+    text-align: left;
+  }
+
+  .section-index--center {
+    justify-content: flex-start;
+  }
+
+  .section-heading h2,
+  .ecosystem-heading h2,
+  .cinematic-final h2,
+  .final-cta h2 {
+    font-size: clamp(40px, 11.8vw, 50px);
+    line-height: 1;
+    letter-spacing: -0.048em;
+    text-wrap: balance;
+  }
+
+  .section-heading p,
+  .ecosystem-heading p,
+  .interactive-how__heading p,
+  .user-journey__heading p {
+    max-width: 36rem;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.56;
+  }
+
+  .glass-card,
+  .ecosystem-card,
+  .interactive-how__visual-shell,
+  .location-map {
+    backdrop-filter: blur(15px) saturate(112%);
+  }
+
+  .story-progress {
+    display: none !important;
+  }
+
+  .story-progress-mobile {
+    top: 83px;
+    right: 12px;
+  }
+
+  /* Header and hero */
+  .floating-nav {
+    top: 10px;
+    width: calc(100% - 20px);
+    height: 62px;
+    padding: 7px 8px 7px 9px;
+    border-radius: 19px;
+  }
+
+  .nav-brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-cta {
+    min-width: 0;
+    height: 44px;
+    padding-inline: 12px;
+  }
+
+  .nav-menu {
+    flex: 0 0 44px;
+  }
+
+  .nav-links {
+    top: 68px;
+    max-height: calc(100svh - 96px);
+    overflow-y: auto;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 112px 0 72px;
+    overflow: clip;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .hero-copy {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .hero-kicker {
+    justify-content: center;
+    max-width: 100%;
+    margin-bottom: 20px;
+    font-size: 9px;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    white-space: normal;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(45px, 13vw, 52px);
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+
+  .hero-subtitle {
+    margin-top: 22px;
+    font-size: 21px;
+    line-height: 1.26;
+  }
+
+  .hero-lead {
+    max-width: 34rem;
+    margin-top: 17px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    width: 100%;
+    margin-top: 28px;
+  }
+
+  .hero-actions .button,
+  .final-actions .button {
+    width: 100%;
+    min-height: 54px;
+  }
+
+  .hero-note {
+    justify-content: center;
+    margin-top: 18px;
+    text-align: left;
+  }
+
+  .hero-visual {
+    min-height: 340px;
+    margin-top: 4px;
+    overflow: clip;
+  }
+
+  .hero-emblem-sphere {
+    width: min(78vw, 286px);
+  }
+
+  .hero-logo {
+    width: min(72vw, 265px);
+  }
+
+  .logo-halo {
+    width: 320px;
+    height: 320px;
+  }
+
+  .hero-orbit {
+    right: -48%;
+    width: 420px;
+    height: 420px;
+    opacity: 0.52;
+  }
+
+  .hero-signal-silhouettes {
+    opacity: 0.5;
+    scale: 0.82;
+  }
+
+  .hero-flow-card {
+    right: 50%;
+    bottom: 4px;
+    width: calc(100% - 8px);
+    padding: 14px 12px;
+    transform: translateX(50%);
+  }
+
+  .hero-flow-card > div {
+    gap: 5px;
+  }
+
+  .hero-flow-card b {
+    font-size: 8px;
+  }
+
+  /* One-column content rhythm */
+  .concept-grid,
+  .steps-grid,
+  .location-grid,
+  .ecosystem-cards,
+  .food-grid,
+  .flow-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .concept-grid,
+  .food-grid,
+  .ecosystem-cards {
+    gap: 14px;
+  }
+
+  .concept-card {
+    min-height: 260px;
+    padding: 24px;
+  }
+
+  .steps-grid {
+    gap: 28px;
+  }
+
+  .step {
+    grid-template-columns: 62px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+
+  .step-number {
+    font-size: 54px;
+  }
+
+  .ecosystem-heading {
+    text-align: left;
+  }
+
+  .ecosystem-card {
+    min-height: 430px;
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .ecosystem-visual {
+    height: 222px;
+    margin-top: 22px;
+  }
+
+  .ecosystem-card__copy h3 {
+    font-size: 25px;
+  }
+
+  .ecosystem-caption {
+    margin-top: 26px;
+    letter-spacing: 0.11em;
+    text-align: center;
+  }
+
+  .ecosystem-section__glow,
+  .app-section::before {
+    width: 100%;
+    filter: blur(42px);
+    opacity: 0.62;
+  }
+
+  /* Interactive story and calculator */
+  .interactive-how__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .interactive-how__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .interactive-how__connector {
+    left: 21px;
+  }
+
+  .interactive-step,
+  .interactive-step:first-of-type {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    width: 100%;
+    min-height: 0;
+    padding: 15px 0;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .interactive-step::after {
+    inset: 5px 0;
+  }
+
+  .interactive-step__number {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .interactive-step__copy strong {
+    font-size: 19px;
+  }
+
+  .interactive-step__copy > span {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.48;
+  }
+
+  .interactive-how__visual-shell {
+    width: calc(100% + 12px);
+    min-width: 0;
+    min-height: 0;
+    margin-inline: -6px;
+    padding: 6px;
+    border-radius: 24px;
+    box-shadow: 0 24px 62px rgba(0, 0, 0, 0.32), inset 0 1px rgba(255, 255, 255, 0.045);
+  }
+
+  .interactive-how__visual-frame {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    padding: 10px;
+    border-radius: 19px;
+  }
+
+  .interactive-how__visual {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .interactive-how__visual-glow {
+    right: -60px;
+    bottom: -70px;
+    width: 210px;
+    height: 210px;
+    filter: blur(52px);
+  }
+
+  .interactive-how__visual-meta {
+    margin: 13px 6px 4px;
+  }
+
+  .nutrition-calculator,
+  .nutrition-result {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .nutrition-calculator__intro {
+    margin: 20px 0 18px;
+  }
+
+  .nutrition-calculator__intro strong {
+    font-size: 26px;
+  }
+
+  .nutrition-calculator__form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .nutrition-calculator__field,
+  .nutrition-calculator__field--name,
+  .nutrition-calculator__field--gender,
+  .nutrition-calculator__field--wide,
+  .nutrition-calculator__field--goal {
+    grid-column: 1;
+    width: 100%;
+  }
+
+  .nutrition-calculator input[type="text"],
+  .nutrition-calculator input[type="number"],
+  .nutrition-calculator select {
+    min-height: 50px;
+    font-size: 16px;
+  }
+
+  .nutrition-calculator__segments {
+    min-height: 50px;
+  }
+
+  .nutrition-calculator__segments--three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nutrition-calculator__segments span {
+    min-height: 43px;
+    font-size: 12px;
+  }
+
+  .nutrition-calculator__submit {
+    min-height: 54px;
+  }
+
+  .nutrition-result__hero {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .nutrition-result__ready {
+    align-self: flex-start;
+  }
+
+  .nutrition-result__macros {
+    gap: 6px;
+  }
+
+  .nutrition-result__macros > div {
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .nutrition-result__macros strong {
+    font-size: 17px;
+  }
+
+  .nutrition-result__plan-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nutrition-result__meals article {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .nutrition-result__meals b {
+    grid-column: 2;
+    margin-top: -3px;
+  }
+
+  .nutrition-result__actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nutrition-result__actions button {
+    min-height: 48px;
+  }
+
+  /* Location */
+  .location-grid {
+    gap: 28px;
+  }
+
+  .location-address {
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .location-address > div {
+    min-width: 0;
+  }
+
+  .location-address strong,
+  .location-address p {
+    overflow-wrap: anywhere;
+  }
+
+  .location-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .location-map {
+    width: 100%;
+    min-height: 390px;
+    border-radius: 23px;
+  }
+
+  .location-map__canvas {
+    inset: 38px -5% 4px;
+    width: 110%;
+    height: calc(100% - 42px);
+  }
+
+  .location-map__marker {
+    left: 47%;
+    gap: 3px;
+    scale: 0.78;
+    transform-origin: left center;
+  }
+
+  .location-map__marker-copy {
+    min-width: 146px;
+  }
+
+  /* Simplified mobile QR story: same scroll states, stable vertical composition. */
+  .qr-scenario {
+    min-height: 238svh;
+    overflow: clip;
+  }
+
+  .qr-scenario__sticky {
+    min-height: 720px;
+    overflow: clip;
+  }
+
+  .qr-scenario__heading {
+    top: 78px;
+    width: 100%;
+    padding-inline: 20px;
+  }
+
+  .qr-scenario__heading h2 {
+    max-width: 390px;
+    font-size: clamp(38px, 10.8vw, 46px);
+    line-height: 0.98;
+  }
+
+  .qr-scenario__heading p {
+    max-width: 360px;
+    margin-top: 11px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .qr-scenario__scene {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .qr-scenario__package-wrap {
+    left: 50%;
+    bottom: 46%;
+    width: min(73vw, 286px);
+    margin-left: min(-36.5vw, -143px);
+  }
+
+  .qr-packaging__sticker {
+    width: 48px;
+  }
+
+  .qr-packaging__caption {
+    left: 5%;
+    right: 5%;
+    bottom: -5%;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .qr-packaging__caption span,
+  .qr-packaging__caption strong {
+    font-size: 6px;
+  }
+
+  .qr-scenario__phone {
+    left: 50%;
+    bottom: -3%;
+    width: min(59vw, 232px);
+    margin-left: min(-29.5vw, -116px);
+    filter: drop-shadow(0 24px 34px rgba(0, 0, 0, 0.56)) !important;
+    transform: translate3d(0, 0, 0) scale(0.96) !important;
+  }
+
+  .qr-scenario__phone-face--back {
+    transform: rotateY(0deg) translateZ(1px);
+  }
+
+  .qr-phone-back__sensor-pulse {
+    border-color: rgba(141, 255, 53, 0.28);
+    box-shadow: 0 0 18px rgba(141, 255, 53, 0.14), inset 0 0 16px rgba(141, 255, 53, 0.055);
+  }
+
+  .qr-phone-back__beam {
+    top: 54px;
+    width: 208px;
+    height: 190px;
+    opacity: 0.6;
+  }
+
+  .qr-phone-back__success {
+    padding: 8px 10px 8px 8px;
+  }
+
+  .qr-scenario__phases {
+    display: none;
+  }
+
+  .qr-scenario__grid {
+    opacity: 0.1;
+  }
+
+  .qr-scenario__glow {
+    filter: blur(52px);
+    opacity: 0.56;
+  }
+
+  /* App: one clear central iPhone and feature cards below. */
+  .app-section {
+    padding: 82px 0 78px;
+    overflow: clip;
+  }
+
+  .app-section .section-heading {
+    text-align: left;
+  }
+
+  .app-section .section-heading p {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 1.56;
+  }
+
+  .phones-stage {
+    width: 100%;
+    height: 610px;
+    margin: -8px 0 0;
+    overflow: visible;
+    transform: none !important;
+  }
+
+  .phones-stage::before {
+    inset: 12% -10% 8%;
+    opacity: 0.2;
+  }
+
+  .phone--far-left,
+  .phone--left,
+  .phone--right {
+    display: none !important;
+  }
+
+  .phone--center {
+    left: 50%;
+    bottom: 22px;
+    width: min(73vw, 284px);
+    opacity: 1 !important;
+    filter: drop-shadow(0 30px 42px rgba(0, 0, 0, 0.66)) drop-shadow(0 0 28px rgba(141, 255, 53, 0.11));
+    transform: translateX(-50%) !important;
+  }
+
+  .phone-shell {
+    border-width: 2px;
+    border-radius: 44px;
+  }
+
+  .phone-shell::before {
+    top: 10px;
+    width: 76px;
+    height: 21px;
+  }
+
+  .phone-pedestal {
+    bottom: 0;
+    width: 90%;
+    height: 110px;
+    opacity: 0.7;
+  }
+
+  .feature-strip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 22px;
+    padding: 7px;
+  }
+
+  .feature-item {
+    min-height: 0;
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .feature-item > span {
+    margin-bottom: 12px;
+  }
+
+  .feature-item strong {
+    font-size: 18px;
+  }
+
+  .feature-item p {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Journey, food, comparison and flow */
+  .user-journey {
+    padding-top: 82px;
+  }
+
+  .user-journey__list {
+    padding-left: 44px;
+  }
+
+  .user-journey__track--vertical {
+    left: 16px;
+  }
+
+  .user-journey__node {
+    left: -39px;
+  }
+
+  .user-journey__card {
+    grid-template-columns: 42px minmax(0, 1fr);
+    min-width: 0;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .food-section {
+    padding-top: 86px;
+  }
+
+  .khinkali-showcase {
+    margin-bottom: 68px;
+  }
+
+  .khinkali-copy {
+    margin: 14px 14px 0;
+    padding: 24px 20px;
+  }
+
+  .khinkali-copy h3 {
+    font-size: 33px;
+  }
+
+  .khinkali-stage {
+    min-height: 400px;
+    overflow: clip;
+  }
+
+  .khinkali-object {
+    width: 100%;
+  }
+
+  .food-art {
+    height: 232px;
+  }
+
+  .food-info {
+    padding: 20px;
+  }
+
+  .food-info h3 {
+    min-height: 0;
+  }
+
+  .compare-table {
+    padding: 6px 16px;
+  }
+
+  .compare-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 20px 0;
+  }
+
+  .compare-row > span:last-child {
+    grid-column: 1;
+    padding: 14px;
+  }
+
+  .flow-grid {
+    gap: 30px;
+  }
+
+  .flow-current {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px;
+  }
+
+  .flow-current > div:first-child {
+    grid-row: auto;
+  }
+
+  .rewards-card {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 24px 18px;
+  }
+
+  .reward {
+    grid-template-columns: 16px 64px minmax(0, 1fr);
+    padding-inline: 2px;
+  }
+
+  /* Compact closing scene; keep the premium center, remove colliding satellites. */
+  .cinematic-final {
+    min-height: 760px;
+    padding: 88px 0 64px;
+  }
+
+  .cinematic-final__container {
+    min-height: 610px;
+  }
+
+  .cinematic-final__content {
+    padding-top: 24px;
+  }
+
+  .cinematic-final__content > p {
+    margin-top: 22px;
+    font-size: 16px;
+    line-height: 1.56;
+  }
+
+  .cinematic-final__button {
+    width: 100%;
+    max-width: none;
+    min-height: 58px;
+  }
+
+  .cinematic-final__watermark {
+    top: 45%;
+    width: min(112vw, 470px);
+    opacity: 0.54;
+  }
+
+  .cinematic-final__flame-pod,
+  .final-ration {
+    display: none;
+  }
+
+  .cinematic-final__signature {
+    gap: 8px;
+    margin-top: 46px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  footer {
+    padding: 26px 0 32px;
+  }
+
+  footer .container {
+    gap: 7px;
+    padding-inline: 20px;
+    line-height: 1.45;
+  }
+
+  /* Decorative layers must never define the mobile layout width. */
+  .cinematic-background,
+  .cinematic-background__graph,
+  .cinematic-background__wash,
+  .cinematic-background__orb,
+  .cinematic-background__orbit,
+  .hero-orbit,
+  .logo-halo,
+  .final-rings {
+    pointer-events: none;
+  }
+
+  .cinematic-background__graph {
+    inset-inline: -24%;
+    width: 148%;
+    opacity: 0.28;
+  }
+
+  .cinematic-background__wash {
+    filter: blur(72px);
+    opacity: 0.08;
+  }
+
+  .cinematic-background__orbit {
+    opacity: 0.2;
+  }
+}
+
+@media (max-width: 430px) {
+  .container,
+  .landing-shell .container,
+  .qr-scenario__heading {
+    padding-inline: 18px;
+  }
+
+  .section {
+    padding-block: 72px;
+  }
+
+  .floating-nav {
+    width: calc(100% - 16px);
+  }
+
+  .nav-cta {
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+
+  .hero h1 {
+    font-size: clamp(43px, 12.7vw, 49px);
+  }
+
+  .hero-visual {
+    min-height: 326px;
+  }
+
+  .hero-flow-card b {
+    font-size: 7.5px;
+  }
+
+  .section-heading h2,
+  .ecosystem-heading h2,
+  .cinematic-final h2,
+  .final-cta h2 {
+    font-size: clamp(38px, 11.2vw, 46px);
+  }
+
+  .interactive-how__visual-frame {
+    padding: 9px;
+  }
+
+  .nutrition-result__macros strong {
+    font-size: 15px;
+  }
+
+  .location-map__marker {
+    left: 43%;
+    scale: 0.72;
+  }
+
+  .qr-scenario__package-wrap {
+    width: min(75vw, 280px);
+    margin-left: min(-37.5vw, -140px);
+  }
+
+  .qr-scenario__phone {
+    width: min(60vw, 226px);
+    margin-left: min(-30vw, -113px);
+  }
+
+  .phone--center {
+    width: min(76vw, 278px);
+  }
+
+  .reward {
+    grid-template-columns: 14px 58px minmax(0, 1fr);
+  }
+
+  .reward p {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .qr-scenario {
+    min-height: auto;
+    padding: 82px 0 56px;
+  }
+
+  .qr-scenario__sticky {
+    position: relative;
+    height: auto;
+    min-height: 910px;
+  }
+
+  .qr-scenario__heading {
+    top: 0;
+  }
+
+  .qr-scenario__phone {
+    opacity: 1 !important;
+  }
+
+  .phone-shell,
+  .phone-shell--live::after,
+  .cinematic-background__graph,
+  .ecosystem-card,
+  .khinkali-levitation {
+    animation: none !important;
+  }
+}
