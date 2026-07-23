@@ -367,9 +367,17 @@
   background: rgba(255, 255, 255, 0.024);
 }
 
+.nutrition-result__meals picture,
 .nutrition-result__meals img {
   width: 44px;
   height: 44px;
+}
+
+.nutrition-result__meals picture {
+  display: block;
+}
+
+.nutrition-result__meals img {
   object-fit: cover;
   border-radius: 10px;
 }
@@ -485,6 +493,7 @@
     grid-template-columns: 42px minmax(0, 1fr);
   }
 
+  .nutrition-result__meals picture,
   .nutrition-result__meals img {
     width: 42px;
     height: 42px;

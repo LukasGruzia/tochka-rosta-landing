@@ -549,9 +549,17 @@
   background: linear-gradient(180deg, transparent 45%, rgba(3, 8, 6, 0.78));
 }
 
+.is-food__image picture,
 .is-food__image img {
   width: 100%;
   height: 100%;
+}
+
+.is-food__image picture {
+  display: block;
+}
+
+.is-food__image img {
   object-fit: cover;
 }
 

@@ -333,7 +333,10 @@ export function NutritionResultPanel({
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.48, delay: reduceMotion ? 0 : 0.28 + index * 0.07 }}
           >
-            <img src={meal.image} alt="" loading="lazy" />
+            <picture>
+              <source media="(max-width: 767px)" srcSet={meal.mobileImage} />
+              <img src={meal.image} alt="" loading="lazy" decoding="async" />
+            </picture>
             <div>
               <span>{mealLabels[index]}</span>
               <strong>{meal.name}</strong>

@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/flow-experience.css'
 
 export type FlowReward = {
@@ -60,9 +61,10 @@ function Checkmark() {
 export function FlowFlame({ active: controlledActive, className = '' }: FlowFlameProps) {
   const flameRef = useRef<HTMLDivElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
+  const isMobile = useIsMobile()
   const isInView = useInView(flameRef, { amount: 0.45, once: false })
   const active = reduceMotion || (controlledActive ?? isInView)
-  const isAnimated = active && !reduceMotion
+  const isAnimated = active && !reduceMotion && !isMobile
 
   return (
     <motion.div
@@ -192,7 +194,61 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
   )
 }
 
-export function FlowExperience({ rewards = defaultRewards, currentDays = 7, className = '' }: FlowExperienceProps) {
+function MobileFlowExperience({ rewards, currentDays, className }: Required<FlowExperienceProps>) {
+  const milestones = rewards.map(({ days }) => days)
+
+  return (
+    <motion.div
+      className={`mobile-flow ${className}`.trim()}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.16 }}
+      transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <header className="mobile-flow__intro">
+        <span>ПОТОК</span>
+        <h3>Держи ритм каждый день.</h3>
+        <p>Отмечай питание, собирай дни подряд и получай награды за стабильность.</p>
+      </header>
+
+      <section className="mobile-flow__streak" aria-label={`Текущий поток — ${currentDays} дней`}>
+        <div>
+          <span>Текущий поток</span>
+          <strong>{currentDays} дней</strong>
+          <small>Серия активна · следующий рубеж 14 дней</small>
+        </div>
+        <span className="mobile-flow__flame" aria-hidden="true">
+          <i />
+          <b />
+        </span>
+      </section>
+
+      <div className="mobile-flow__milestones" aria-label="Линейка наград">
+        {milestones.map((days) => (
+          <span className={days <= currentDays ? 'is-reached' : ''} key={days}>
+            {days}
+            <small>дн.</small>
+          </span>
+        ))}
+      </div>
+
+      <div className="mobile-flow__rewards">
+        {rewards.slice(0, 3).map((item, index) => (
+          <article key={`${item.days}-${item.reward}`}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <strong>{item.days} {item.unit}</strong>
+              <p>{item.reward}</p>
+            </div>
+            <i aria-hidden="true">✓</i>
+          </article>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+function DesktopFlowExperience({ rewards = defaultRewards, currentDays = 7, className = '' }: FlowExperienceProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
   const isInView = useInView(rootRef, { amount: 0.32, once: false, margin: '-6% 0px -6% 0px' })
@@ -220,6 +276,16 @@ export function FlowExperience({ rewards = defaultRewards, currentDays = 7, clas
       </div>
     </div>
   )
+}
+
+export function FlowExperience({ rewards = defaultRewards, currentDays = 7, className = '' }: FlowExperienceProps) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <MobileFlowExperience rewards={rewards} currentDays={currentDays} className={className} />
+  }
+
+  return <DesktopFlowExperience rewards={rewards} currentDays={currentDays} className={className} />
 }
 
 export default FlowExperience

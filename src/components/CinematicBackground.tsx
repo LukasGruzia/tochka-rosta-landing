@@ -1,11 +1,12 @@
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import proteinShake from '../assets/food/protein-shake.png'
+import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/cinematic-background.css'
 
 const graphPath = 'M -48 826 C 82 826 116 786 228 790 C 354 796 376 706 500 716 C 628 726 662 632 784 644 C 910 656 948 516 1060 528 C 1180 540 1222 384 1328 396 C 1390 402 1432 286 1490 246'
 const goldPath = 'M 914 538 C 1010 532 1034 468 1100 452 C 1192 430 1228 348 1328 396 C 1390 402 1432 286 1490 246'
 
-export function CinematicBackground() {
+function DesktopCinematicBackground() {
   const reduceMotion = Boolean(useReducedMotion())
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 86, damping: 26, mass: 0.34 })
@@ -85,7 +86,7 @@ export function CinematicBackground() {
         className="cinematic-background__shake"
         style={reduceMotion ? { opacity: 0.18 } : { y: shakeY, rotate: shakeRotate, scale: shakeScale, opacity: shakeOpacity }}
       >
-        <img src={proteinShake} loading="lazy" alt="" />
+        <img src={proteinShake} loading="lazy" decoding="async" alt="" />
       </motion.figure>
 
       <motion.div
@@ -98,6 +99,20 @@ export function CinematicBackground() {
       <div className="cinematic-background__orbit cinematic-background__orbit--two" />
     </div>
   )
+}
+
+export function CinematicBackground() {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <div className="cinematic-background cinematic-background--mobile" aria-hidden="true">
+        <span className="cinematic-background__mobile-wash" />
+      </div>
+    )
+  }
+
+  return <DesktopCinematicBackground />
 }
 
 export default CinematicBackground

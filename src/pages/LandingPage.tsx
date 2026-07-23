@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import logoMain from '../assets/brand/logo-main.png'
 import appProfile from '../assets/app/app-profile.png'
 import khinkaliImage from '../assets/food/khinkali.png'
+import khinkaliMobileImage from '../assets/mobile/food/khinkali.jpg'
 import { CinematicBackground } from '../components/CinematicBackground'
 import { BrandPreloader, ScrollStoryProgress } from '../components/CinematicShell'
 import { ComparisonSection } from '../components/ComparisonSection'
@@ -13,6 +14,7 @@ import { LiveFlowAppScreen, LiveFoodAppScreen } from '../components/LiveAppScree
 import LocationMap from '../components/LocationMap'
 import { QrScenarioSection } from '../components/QrScenarioSection'
 import { foodShowcase } from '../data/foodShowcase'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const navItems = [
   ['concept', 'Концепция'],
@@ -62,13 +64,15 @@ function CheckIcon() {
 
 function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const reduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
+  const lightMotion = Boolean(reduceMotion) || isMobile
   return (
     <motion.div
       className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 34, filter: 'blur(10px)' }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: false, amount: 0.16, margin: '-4% 0px -4% 0px' }}
-      transition={{ duration: 0.72, delay, ease: [0.16, 1, 0.3, 1] }}
+      initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 16 : 34, ...(isMobile ? {} : { filter: 'blur(10px)' }) }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, ...(isMobile ? {} : { filter: 'blur(0px)' }) }}
+      viewport={{ once: isMobile, amount: isMobile ? 0.12 : 0.16, margin: '-4% 0px -4% 0px' }}
+      transition={{ duration: lightMotion ? 0.5 : 0.72, delay: isMobile ? Math.min(delay, 0.08) : delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
@@ -114,9 +118,11 @@ export function LandingPage() {
   const [activeSection, setActiveSection] = useState('concept')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [heroReady, setHeroReady] = useState(false)
+  const isMobile = useIsMobile()
   const khinkaliSectionRef = useRef<HTMLDivElement>(null)
   const appSectionRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
+  const lightMotion = Boolean(reduceMotion) || isMobile
   const { scrollYProgress } = useScroll()
   const { scrollYProgress: khinkaliProgress } = useScroll({
     target: khinkaliSectionRef,
@@ -163,7 +169,7 @@ export function LandingPage() {
       <BrandPreloader onComplete={() => setHeroReady(true)} />
       <CinematicBackground />
       <ScrollStoryProgress />
-      <motion.div className="page-progress" style={{ scaleX: progressScale }} />
+      <motion.div className="page-progress" style={isMobile ? undefined : { scaleX: progressScale }} />
 
       <header className="floating-nav" aria-label="Навигация по странице">
         <button className="nav-brand" onClick={() => scrollTo('top')} aria-label="Наверх">
@@ -185,7 +191,7 @@ export function LandingPage() {
 
       <main>
         <section className="hero" id="top">
-          <motion.div className="hero-orbit" style={{ y: heroOrbY }} aria-hidden="true">
+          <motion.div className="hero-orbit" style={isMobile ? undefined : { y: heroOrbY }} aria-hidden="true">
             <span /><span /><span />
           </motion.div>
           <div className="hero-grid container">
@@ -193,7 +199,13 @@ export function LandingPage() {
               <motion.div className="hero-kicker" initial={{ opacity: 0 }} animate={heroReady ? { opacity: 1 } : { opacity: 0 }} transition={{ duration: 0.8, delay: 0.06 }}>
                 <span>Healthy Hub</span><i />Тюмень · ARSIB Tower · 2026
               </motion.div>
-              <motion.h1 initial={reduceMotion ? false : { opacity: 0, y: 45, filter: 'blur(14px)' }} animate={heroReady ? { opacity: 1, y: 0, filter: 'blur(0)' } : { opacity: 0, y: 45, filter: 'blur(14px)' }} transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}>
+              <motion.h1
+                initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 12 : 45, ...(isMobile ? {} : { filter: 'blur(14px)' }) }}
+                animate={heroReady
+                  ? { opacity: 1, y: 0, ...(isMobile ? {} : { filter: 'blur(0)' })}
+                  : { opacity: 0, y: isMobile ? 12 : 45, ...(isMobile ? {} : { filter: 'blur(14px)' }) }}
+                transition={{ duration: lightMotion ? 0.48 : 0.9, delay: isMobile ? 0.04 : 0.12, ease: [0.16, 1, 0.3, 1] }}
+              >
                 ТОЧКА<br /><em>РОСТА</em>
               </motion.h1>
               <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 22 }} animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }} transition={{ duration: 0.75, delay: 0.3 }}>
@@ -211,12 +223,19 @@ export function LandingPage() {
               </motion.p>
             </div>
 
-            <motion.div className="hero-visual" initial={reduceMotion ? false : { opacity: 0, scale: 0.82, filter: 'blur(18px)' }} animate={heroReady ? { opacity: 1, scale: 1, filter: 'blur(0)' } : { opacity: 0, scale: 0.82, filter: 'blur(18px)' }} transition={{ duration: 1.15, delay: 0.02, ease: [0.16, 1, 0.3, 1] }}>
+            <motion.div
+              className="hero-visual"
+              initial={reduceMotion ? false : { opacity: 0, scale: isMobile ? 0.96 : 0.82, ...(isMobile ? {} : { filter: 'blur(18px)' }) }}
+              animate={heroReady
+                ? { opacity: 1, scale: 1, ...(isMobile ? {} : { filter: 'blur(0)' })}
+                : { opacity: 0, scale: isMobile ? 0.96 : 0.82, ...(isMobile ? {} : { filter: 'blur(18px)' }) }}
+              transition={{ duration: lightMotion ? 0.52 : 1.15, delay: isMobile ? 0.06 : 0.02, ease: [0.16, 1, 0.3, 1] }}
+            >
               <div className="logo-halo" />
               <div className="hero-signal-silhouettes" aria-hidden="true"><span /><span /><span /></div>
               <div className="hero-emblem-sphere">
                 <i aria-hidden="true" />
-                <img src={logoMain} alt="Логотип Точка Роста" className="hero-logo" />
+                <img src={logoMain} decoding="async" fetchPriority="high" alt="Логотип Точка Роста" className="hero-logo" />
               </div>
               <div className="hero-flow-card glass-card">
                 <span>Персональный путь</span>
@@ -249,7 +268,14 @@ export function LandingPage() {
           <div className="container">
             <span className="section-index section-index--center" aria-hidden="true">02 / 10</span>
             <SectionHeading eyebrow="Решение" title="Цель → расчёт → готовые блюда." text="Четыре шага. Всё в одном ритме." align="center" />
-            <div className="steps-line" aria-hidden="true"><motion.i initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: false, amount: 0.4 }} transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }} /></div>
+            <div className="steps-line" aria-hidden="true">
+              <motion.i
+                initial={isMobile ? false : { scaleX: 0 }}
+                whileInView={isMobile ? undefined : { scaleX: 1 }}
+                viewport={{ once: isMobile, amount: 0.4 }}
+                transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+              />
+            </div>
             <div className="steps-grid">
               {steps.map(([number, title, text], index) => (
                 <Reveal className="step" delay={index * 0.1} key={number}>
@@ -289,19 +315,31 @@ export function LandingPage() {
           <div className="container">
             <span className="section-index section-index--center" aria-hidden="true">07 / 10</span>
             <SectionHeading eyebrow="Приложение" title="Рацион из реальных блюд. В твоём ритме." text="Приложение считает норму, показывает блюда и помогает держать ритм без ручных подсчётов." align="center" />
-            <motion.div className="phones-stage" style={{ y: appStageY, scale: appStageScale }}>
-              <motion.div className="phone phone--far-left" initial={{ opacity: 0, x: 100, rotate: 0 }} whileInView={{ opacity: 0.58, x: 0, rotate: -5 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-                <div className="phone-shell"><AppPlaceholder type="home" /></div>
-              </motion.div>
-              <motion.div className="phone phone--left" initial={{ opacity: 0, y: 80, rotate: 0 }} whileInView={{ opacity: 0.94, y: 0, rotate: -2 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}>
-                <div className="phone-shell phone-shell--image"><img src={appProfile} loading="lazy" alt="Экран профиля приложения Точка Роста" /></div>
-              </motion.div>
-              <motion.div className="phone phone--center" initial={{ opacity: 0, y: 100, scale: 0.9 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 1, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}>
+            <motion.div className="phones-stage" style={isMobile ? undefined : { y: appStageY, scale: appStageScale }}>
+              {!isMobile && (
+                <>
+                  <motion.div className="phone phone--far-left" initial={{ opacity: 0, x: 100, rotate: 0 }} whileInView={{ opacity: 0.58, x: 0, rotate: -5 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
+                    <div className="phone-shell"><AppPlaceholder type="home" /></div>
+                  </motion.div>
+                  <motion.div className="phone phone--left" initial={{ opacity: 0, y: 80, rotate: 0 }} whileInView={{ opacity: 0.94, y: 0, rotate: -2 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}>
+                    <div className="phone-shell phone-shell--image"><img src={appProfile} loading="lazy" decoding="async" alt="Экран профиля приложения Точка Роста" /></div>
+                  </motion.div>
+                </>
+              )}
+              <motion.div
+                className="phone phone--center"
+                initial={isMobile ? false : { opacity: 0, y: 100, scale: 0.9 }}
+                whileInView={isMobile ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: isMobile, amount: 0.18 }}
+                transition={{ duration: 1, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <div className="phone-shell phone-shell--live"><LiveFlowAppScreen /></div>
               </motion.div>
-              <motion.div className="phone phone--right" initial={{ opacity: 0, x: -100, rotate: 0 }} whileInView={{ opacity: 0.88, x: 0, rotate: 4 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}>
-                <div className="phone-shell phone-shell--live"><LiveFoodAppScreen /></div>
-              </motion.div>
+              {!isMobile && (
+                <motion.div className="phone phone--right" initial={{ opacity: 0, x: -100, rotate: 0 }} whileInView={{ opacity: 0.88, x: 0, rotate: 4 }} viewport={{ once: false, amount: 0.18 }} transition={{ duration: 0.9, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}>
+                  <div className="phone-shell phone-shell--live"><LiveFoodAppScreen /></div>
+                </motion.div>
+              )}
               <div className="phone-pedestal" />
             </motion.div>
             <div className="feature-strip glass-card">
@@ -342,13 +380,21 @@ export function LandingPage() {
               </Reveal>
               <div className="khinkali-stage" aria-label="ПП-хинкали — премиальная демонстрация блюда">
                 <div className="khinkali-glow" />
-                <motion.div className="khinkali-object" style={{ y: khinkaliY, rotate: khinkaliRotate, scale: khinkaliScale, opacity: khinkaliOpacity, filter: khinkaliBlur }}>
+                <motion.div
+                  className="khinkali-object"
+                  style={isMobile
+                    ? { opacity: 1 }
+                    : { y: khinkaliY, rotate: khinkaliRotate, scale: khinkaliScale, opacity: khinkaliOpacity, filter: khinkaliBlur }}
+                >
                   <motion.div
                     className="khinkali-levitation"
-                    animate={reduceMotion ? undefined : { y: [-8, 8, -8] }}
+                    animate={lightMotion ? undefined : { y: [-8, 8, -8] }}
                     transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
                   >
-                    <img src={khinkaliImage} loading="lazy" alt="Хинкали в премиальной подаче" />
+                    <picture>
+                      <source media="(max-width: 767px)" srcSet={khinkaliMobileImage} />
+                      <img src={khinkaliImage} loading="lazy" decoding="async" alt="Хинкали в премиальной подаче" />
+                    </picture>
                     <span className="khinkali-reflection" />
                   </motion.div>
                 </motion.div>
@@ -365,7 +411,10 @@ export function LandingPage() {
                 <Reveal className="food-card glass-card" delay={(index % 3) * 0.08} key={food.name}>
                   <div className={`food-art food-art--photo food-art--${food.id}`} role="img" aria-label={`Визуал блюда: ${food.name}`}>
                     <span className="food-badge">{food.badge}</span><i /><i /><i />
-                    <img src={food.image} loading="lazy" alt="" />
+                    <picture>
+                      <source media="(max-width: 767px)" srcSet={food.mobileImage} />
+                      <img src={food.image} loading="lazy" decoding="async" alt="" />
+                    </picture>
                   </div>
                   <div className="food-info">
                     <h3>{food.name}</h3>
@@ -381,15 +430,17 @@ export function LandingPage() {
 
         <section className="section flow-section section-tech-grid" id="flow">
           <div className="container flow-grid">
-            <div className="flow-copy">
-              <span className="section-index" aria-hidden="true">09 / 10</span>
-              <SectionHeading eyebrow="Система «Поток»" title="Закрывай день. Сохраняй серию." text="Закрытые дни превращаются в бонусы." />
-              <Reveal className="flow-current glass-card">
-                <div><small>Текущий поток</small><strong>7 дней</strong></div>
-                <div className="flow-progress"><motion.i initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} /></div>
-                <span>До следующей награды — 7 дней</span>
-              </Reveal>
-            </div>
+            {!isMobile && (
+              <div className="flow-copy">
+                <span className="section-index" aria-hidden="true">09 / 10</span>
+                <SectionHeading eyebrow="Система «Поток»" title="Закрывай день. Сохраняй серию." text="Закрытые дни превращаются в бонусы." />
+                <Reveal className="flow-current glass-card">
+                  <div><small>Текущий поток</small><strong>7 дней</strong></div>
+                  <div className="flow-progress"><motion.i initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} /></div>
+                  <span>До следующей награды — 7 дней</span>
+                </Reveal>
+              </div>
+            )}
             <Reveal delay={0.14}><FlowExperience /></Reveal>
           </div>
         </section>

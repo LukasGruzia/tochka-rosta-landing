@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import logoMain from '../assets/brand/logo-main.png'
+import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/cinematic-shell.css'
 
 export type StoryChapter = {
@@ -35,6 +36,8 @@ type BrandPreloaderProps = {
  */
 export function BrandPreloader({ onComplete, holdMs = 900 }: BrandPreloaderProps) {
   const reduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
+  const lightMotion = Boolean(reduceMotion) || isMobile
   const [visible, setVisible] = useState(true)
   const callbackRef = useRef(onComplete)
   const hasCompleted = useRef(false)
@@ -44,10 +47,10 @@ export function BrandPreloader({ onComplete, holdMs = 900 }: BrandPreloaderProps
   }, [onComplete])
 
   useEffect(() => {
-    const safeHold = reduceMotion ? 80 : Math.min(Math.max(holdMs, 500), 980)
+    const safeHold = reduceMotion ? 80 : isMobile ? 340 : Math.min(Math.max(holdMs, 500), 980)
     const timer = window.setTimeout(() => setVisible(false), safeHold)
     return () => window.clearTimeout(timer)
-  }, [holdMs, reduceMotion])
+  }, [holdMs, isMobile, reduceMotion])
 
   useEffect(() => {
     if (!visible) return undefined
@@ -72,28 +75,28 @@ export function BrandPreloader({ onComplete, holdMs = 900 }: BrandPreloaderProps
           role="status"
           aria-live="polite"
           aria-label="Точка Роста. Сила в балансе"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={lightMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0, filter: reduceMotion ? 'blur(0px)' : 'blur(7px)' }}
-          transition={{ duration: reduceMotion ? 0.1 : 0.32, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: lightMotion ? 0.16 : 0.32, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="cinematic-preloader__grid" aria-hidden="true" />
           <motion.div
             className="cinematic-preloader__brand"
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 14 }}
+            initial={lightMotion ? false : { opacity: 0, scale: 0.9, y: 14 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.62, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: lightMotion ? 0 : 0.62, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="cinematic-preloader__orbit" aria-hidden="true">
               <span />
               <i />
             </div>
-            <img src={logoMain} alt="" />
+            <img src={logoMain} decoding="async" fetchPriority="high" alt="" />
           </motion.div>
           <motion.p
-            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+            initial={lightMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.48, delay: reduceMotion ? 0 : 0.2 }}
+            transition={{ duration: lightMotion ? 0 : 0.48, delay: lightMotion ? 0 : 0.2 }}
           >
             Сила в балансе
           </motion.p>
@@ -114,12 +117,15 @@ export function ScrollStoryProgress({
   className = '',
 }: ScrollStoryProgressProps) {
   const reduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
   const [activeId, setActiveId] = useState(chapters[0]?.id ?? '')
   const navRef = useRef<HTMLElement>(null)
   const activeLockRef = useRef<{ id: string; until: number } | null>(null)
   const chapterIds = useMemo(() => chapters.map(({ id }) => id).join('|'), [chapters])
 
   useEffect(() => {
+    if (isMobile) return undefined
+
     const existingSections = chapterIds
       .split('|')
       .map((id) => document.getElementById(id))
@@ -156,7 +162,7 @@ export function ScrollStoryProgress({
       window.removeEventListener('scroll', scheduleUpdate)
       window.removeEventListener('resize', scheduleUpdate)
     }
-  }, [chapterIds])
+  }, [chapterIds, isMobile])
 
   const activeIndex = Math.max(0, chapters.findIndex(({ id }) => id === activeId))
   const progress = chapters.length > 1 ? activeIndex / (chapters.length - 1) : 1
@@ -185,7 +191,7 @@ export function ScrollStoryProgress({
     navRef.current?.style.setProperty('--mouse-glow-opacity', visible ? '1' : '0')
   }
 
-  if (!chapters.length) return null
+  if (!chapters.length || isMobile) return null
 
   return (
     <>

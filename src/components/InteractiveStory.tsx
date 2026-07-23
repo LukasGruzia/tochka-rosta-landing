@@ -159,7 +159,10 @@ function FoodVisual({ reduceMotion }: StepVisualProps) {
             transition={{ duration: 0.58, delay: reduceMotion ? 0 : 0.08 + index * 0.09, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="is-food__image">
-              <img src={food.image} alt={food.name} loading="lazy" />
+              <picture>
+                <source media="(max-width: 767px)" srcSet={food.mobileImage} />
+                <img src={food.image} alt={food.name} loading="lazy" decoding="async" />
+              </picture>
               <span>{food.badge}</span>
             </div>
             <div className="is-food__copy">

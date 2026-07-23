@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { foodShowcase } from '../data/foodShowcase'
+import { useIsMobile } from '../hooks/useIsMobile'
 import { FlowFlame } from './FlowExperience'
 import '../styles/live-app-screens.css'
 
@@ -96,6 +97,8 @@ function BookmarkIcon() {
 export function LiveFlowAppScreen() {
   const screenRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = Boolean(useReducedMotion())
+  const isMobile = useIsMobile()
+  const lightMotion = prefersReducedMotion || isMobile
   const isInView = useInView(screenRef, { amount: 0.28, once: false })
   const active = prefersReducedMotion || isInView
 
@@ -123,10 +126,10 @@ export function LiveFlowAppScreen() {
         <span className="live-flow-app__smoke live-flow-app__smoke--two" aria-hidden="true" />
         <motion.div
           className="live-flow-app__flame-wrap"
-          animate={active && !prefersReducedMotion
+          animate={active && !lightMotion
             ? { y: [0, -3, 1, 0], scale: [1, 1.018, 0.99, 1] }
             : { y: 0, scale: 1 }}
-          transition={active && !prefersReducedMotion
+          transition={active && !lightMotion
             ? { duration: 3.8, repeat: Infinity, ease: 'easeInOut' }
             : { duration: 0 }}
         >

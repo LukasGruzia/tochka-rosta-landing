@@ -1,9 +1,12 @@
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import caesarPackage from '../assets/product/caesar-package.png'
 import caesarQr from '../assets/product/caesar-qr.png'
 import caesarFood from '../assets/food/caesar.png'
 import iphoneBack from '../assets/phone/iphone-17-pro-back-premium.png'
+import caesarFoodMobile from '../assets/mobile/food/caesar.jpg'
+import iphoneBackMobile from '../assets/mobile/iphone-17-pro-back-mobile.png'
+import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/qr-scenario.css'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -13,9 +16,9 @@ function PackageShowcase() {
     <div className="qr-packaging" aria-label="Упаковка салата Цезарь с QR-кодом">
       <span className="qr-packaging__orbit" aria-hidden="true" />
       <span className="qr-packaging__shadow" aria-hidden="true" />
-      <img className="qr-packaging__product" src={caesarPackage} alt="Упаковка салата Цезарь Точка Роста" />
+      <img className="qr-packaging__product" src={caesarPackage} loading="lazy" decoding="async" alt="Упаковка салата Цезарь Точка Роста" />
       <div className="qr-packaging__sticker">
-        <img src={caesarQr} alt="QR-код карточки салата Цезарь" />
+        <img src={caesarQr} loading="lazy" decoding="async" alt="QR-код карточки салата Цезарь" />
         <span>QR / КБЖУ</span>
       </div>
       <div className="qr-packaging__caption">
@@ -36,7 +39,7 @@ function PhoneBack({ scanOpacity, successOpacity, reduceMotion }: PhoneBackProps
   return (
     <div className="qr-phone-back" role="img" aria-label="Задняя сторона iPhone Pro с блоком основных камер, наведённых на QR-код">
       <span className="qr-phone-back__mockup-frame" aria-hidden="true">
-        <img className="qr-phone-back__mockup" src={iphoneBack} alt="" />
+        <img className="qr-phone-back__mockup" src={iphoneBack} loading="lazy" decoding="async" alt="" />
       </span>
       <motion.span className="qr-phone-back__sensor-pulse" style={reduceMotion ? { opacity: 0 } : { opacity: scanOpacity }} aria-hidden="true" />
 
@@ -53,7 +56,7 @@ function PhoneBack({ scanOpacity, successOpacity, reduceMotion }: PhoneBackProps
   )
 }
 
-function ProductScreen() {
+function ProductScreen({ imageSrc = caesarFood }: { imageSrc?: string }) {
   const macros = [
     ['320', 'ккал'],
     ['30 г', 'белки'],
@@ -67,7 +70,7 @@ function ProductScreen() {
       <div className="qr-product-screen__header"><span>‹</span><strong>Карточка блюда</strong><span>♡</span></div>
 
       <div className="qr-product-screen__image">
-        <img src={caesarFood} alt="Салат Цезарь с курицей" />
+        <img src={imageSrc} loading="lazy" decoding="async" alt="Салат Цезарь с курицей" />
         <div><span>Много белка</span><span>Лёгкий обед</span></div>
       </div>
 
@@ -97,7 +100,7 @@ function ProductScreen() {
   )
 }
 
-export function QrScenarioSection() {
+function DesktopQrScenarioSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
   const { scrollYProgress } = useScroll({
@@ -201,6 +204,68 @@ export function QrScenarioSection() {
       </div>
     </section>
   )
+}
+
+function MobileQrScenarioSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const isVisible = useInView(sectionRef, { once: true, amount: 0.2, margin: '-8% 0px -8% 0px' })
+
+  return (
+    <section
+      ref={sectionRef}
+      className={`qr-mobile ${isVisible ? 'qr-mobile--visible' : ''}`}
+      id="qr"
+      aria-labelledby="qr-mobile-title"
+    >
+      <div className="container">
+        <header className="qr-mobile__heading">
+          <span className="section-index">06 / 10</span>
+          <span className="eyebrow"><i /> QR-сценарий</span>
+          <h2 id="qr-mobile-title">Сканируешь блюдо.<br /><em>Видишь всё.</em></h2>
+          <p>QR-код открывает состав, КБЖУ, цену и место блюда в твоём рационе.</p>
+        </header>
+
+        <motion.div
+          className="qr-mobile__package"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease }}
+        >
+          <PackageShowcase />
+        </motion.div>
+
+        <div className="qr-mobile__phone-stage" aria-label="Сканирование QR-кода и карточка блюда">
+          <div className="qr-mobile__phone">
+            <div className="qr-mobile__phone-face qr-mobile__phone-face--back">
+              <img src={iphoneBackMobile} loading="lazy" decoding="async" alt="Задняя камера iPhone сканирует QR-код" />
+              <span className="qr-mobile__sensor" aria-hidden="true" />
+              <small><i /> QR найден</small>
+            </div>
+            <div className="qr-mobile__phone-face qr-mobile__phone-face--front">
+              <div className="qr-scenario__phone-shell">
+                <span className="qr-scenario__dynamic-island" aria-hidden="true" />
+                <div className="qr-scenario__screen qr-scenario__screen--product">
+                  <ProductScreen imageSrc={caesarFoodMobile} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="qr-mobile__steps" aria-label="Этапы QR-сценария">
+          <span><i>01</i> Упаковка</span>
+          <span><i>02</i> Сканирование</span>
+          <span><i>03</i> Карточка блюда</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export function QrScenarioSection() {
+  const isMobile = useIsMobile()
+  return isMobile ? <MobileQrScenarioSection /> : <DesktopQrScenarioSection />
 }
 
 export default QrScenarioSection

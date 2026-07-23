@@ -997,3 +997,736 @@
     animation: none !important;
   }
 }
+
+/* Performance mobile mode: avoid scroll-bound paint and GPU-heavy glass layers. */
+@media (max-width: 767px) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .page-progress,
+  .story-progress,
+  .story-progress-mobile {
+    display: none !important;
+  }
+
+  .cinematic-background--mobile {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    contain: strict;
+    background: linear-gradient(180deg, #06100b 0%, #020706 48%, #06100b 100%);
+  }
+
+  .cinematic-background__mobile-wash {
+    position: absolute;
+    top: 8%;
+    left: -25%;
+    width: 105vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    opacity: 0.18;
+    background: radial-gradient(circle, rgba(103, 194, 58, 0.3), transparent 66%);
+  }
+
+  .cinematic-preloader__grid,
+  .cinematic-preloader__orbit,
+  .cinematic-preloader__signal,
+  .hero-orbit,
+  .hero-signal-silhouettes,
+  .interactive-how__visual-grid,
+  .interactive-how__visual-glow,
+  .ecosystem-section__grid,
+  .showcase-orbit,
+  .phone-shell--live::after,
+  .feature-strip::after,
+  .comparison-shell__sweep,
+  .flow-experience__scan,
+  .flow-flame__sparks,
+  .live-flow-app__smoke,
+  .live-flow-app__aurora {
+    display: none !important;
+  }
+
+  .floating-nav,
+  .nav-links,
+  .glass-card,
+  .concept-card,
+  .interactive-how__visual-shell,
+  .location-map,
+  .location-map__marker-copy,
+  .ecosystem-card,
+  .compare-table,
+  .feature-strip,
+  .cinematic-final__toast,
+  .button--ghost,
+  .live-flow-app__nav,
+  .user-journey__card,
+  .comparison-section__panel,
+  .qr-product-screen__image span {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .floating-nav {
+    background: rgba(4, 10, 7, 0.96);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.045);
+  }
+
+  .glass-card,
+  .concept-card,
+  .ecosystem-card,
+  .feature-strip,
+  .compare-table {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.24), inset 0 1px rgba(255, 255, 255, 0.035);
+  }
+
+  .hero-emblem-sphere {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    animation: none !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 22px 44px rgba(0, 0, 0, 0.36);
+  }
+
+  .hero-emblem-sphere > i,
+  .phone-shell,
+  .feature-strip::after,
+  .khinkali-glow,
+  .showcase-orbit,
+  .flow-progress i,
+  .flow-flame__halo,
+  .live-flow-app__intro span i,
+  .live-flow-app__nav-item--active::after,
+  .location-map__marker-radar i,
+  .user-journey__track i,
+  .user-journey__route-spark,
+  .user-journey__card::after {
+    animation: none !important;
+  }
+
+  .logo-halo {
+    filter: none;
+    opacity: 0.5;
+  }
+
+  .app-section::before,
+  .ecosystem-section__glow,
+  .khinkali-reflection,
+  .rewards-card::before {
+    filter: none;
+    opacity: 0.22;
+  }
+
+  .phone--center {
+    filter: none !important;
+  }
+
+  .phone-shell--live {
+    box-shadow: inset 0 0 0 2px #101612, 0 0 0 1px rgba(255, 255, 255, 0.09), 0 20px 42px rgba(0, 0, 0, 0.48);
+  }
+
+  .live-flow-app .flow-flame__halo,
+  .live-flow-app .flow-flame__tongue,
+  .live-flow-app__day--current,
+  .live-flow-app__nav-item--active {
+    filter: none !important;
+  }
+
+  .khinkali-glow {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(214, 168, 79, 0.13), rgba(103, 194, 58, 0.05) 42%, transparent 70%);
+  }
+
+  .khinkali-object {
+    max-width: 320px;
+  }
+
+  .khinkali-object img {
+    filter: none;
+  }
+
+  .khinkali-pedestal {
+    box-shadow: none;
+  }
+
+  .food-card,
+  .food-card:hover,
+  .food-card:hover .food-art--photo > picture > img {
+    filter: none;
+    transform: none;
+  }
+
+  .food-badge,
+  .is-food__image span {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .location-map:hover {
+    transform: none;
+  }
+
+  .location-map__marker-radar i {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+
+  .interactive-how,
+  .ecosystem-section,
+  .location,
+  .app-section,
+  .user-journey,
+  .food-section,
+  .flow-section,
+  .cinematic-final {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 920px;
+  }
+
+  .concept-card,
+  .ecosystem-card,
+  .food-card,
+  .feature-item,
+  .user-journey__card {
+    contain: paint;
+  }
+
+  .landing-shell [style*="will-change"],
+  .landing-shell .khinkali-object,
+  .landing-shell .flow-timeline__stage,
+  .landing-shell .flow-timeline__node,
+  .landing-shell .flow-timeline__fill {
+    will-change: auto !important;
+  }
+
+  /* App performance: one static phone, no screen particles or sweeping light. */
+  .phones-stage {
+    height: 590px;
+  }
+
+  .live-flow-app__smoke--one,
+  .live-flow-app__smoke--two {
+    display: none;
+  }
+
+  .live-flow-app__flame-stage {
+    filter: none;
+  }
+
+  /* Lightweight, non-sticky QR story. */
+  .qr-mobile {
+    position: relative;
+    padding: 82px 0 76px;
+    overflow: clip;
+    isolation: isolate;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1240px;
+    background: linear-gradient(180deg, rgba(2, 7, 6, 0.96), rgba(5, 14, 9, 0.98));
+  }
+
+  .qr-mobile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 57%, rgba(103, 194, 58, 0.08), transparent 38%);
+  }
+
+  .qr-mobile__heading {
+    max-width: 390px;
+  }
+
+  .qr-mobile__heading .section-index,
+  .qr-mobile__heading .eyebrow {
+    margin-bottom: 11px;
+  }
+
+  .qr-mobile__heading h2 {
+    margin: 0;
+    color: #f5f7f5;
+    font-size: clamp(38px, 10.7vw, 45px);
+    line-height: 0.98;
+    letter-spacing: -0.052em;
+  }
+
+  .qr-mobile__heading h2 em {
+    color: var(--green-bright);
+    font-style: normal;
+  }
+
+  .qr-mobile__heading p {
+    margin: 16px 0 0;
+    color: #99a39b;
+    font-size: 15px;
+    line-height: 1.52;
+  }
+
+  .qr-mobile__package {
+    width: min(82vw, 304px);
+    margin: 42px auto 0;
+  }
+
+  .qr-mobile .qr-packaging__orbit {
+    display: none;
+  }
+
+  .qr-mobile .qr-packaging__shadow {
+    filter: none;
+    opacity: 0.45;
+  }
+
+  .qr-mobile .qr-packaging__product {
+    filter: none;
+  }
+
+  .qr-mobile .qr-packaging__sticker {
+    width: 50px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  }
+
+  .qr-mobile .qr-packaging__caption {
+    right: 5%;
+    left: 5%;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(5, 13, 9, 0.92);
+  }
+
+  .qr-mobile .qr-packaging__caption span,
+  .qr-mobile .qr-packaging__caption strong {
+    font-size: 6px;
+  }
+
+  .qr-mobile__phone-stage {
+    display: grid;
+    place-items: center;
+    min-height: 550px;
+    margin-top: 18px;
+  }
+
+  .qr-mobile__phone {
+    position: relative;
+    width: min(67vw, 258px);
+    aspect-ratio: 0.485;
+  }
+
+  .qr-mobile__phone-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 43px;
+    transform: translateY(12px) scale(0.98);
+    opacity: 0;
+  }
+
+  .qr-mobile__phone-face--back {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #e9e9e7;
+    box-shadow: 0 22px 42px rgba(0, 0, 0, 0.38);
+  }
+
+  .qr-mobile__phone-face--back > img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    max-width: none;
+    height: 100%;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+  }
+
+  .qr-mobile__phone-face--back > small {
+    position: absolute;
+    right: 13px;
+    bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px;
+    color: #dfffd2;
+    font: 750 7px/1 ui-monospace, monospace;
+    border: 1px solid rgba(141, 255, 53, 0.24);
+    border-radius: 10px;
+    background: rgba(4, 15, 8, 0.86);
+  }
+
+  .qr-mobile__phone-face--back > small i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green-bright);
+  }
+
+  .qr-mobile__sensor {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    width: 93%;
+    height: 27%;
+    border: 1px solid rgba(141, 255, 53, 0.35);
+    border-radius: 34px;
+    opacity: 0;
+  }
+
+  .qr-mobile__phone-face--front {
+    background: #020604;
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.48);
+  }
+
+  .qr-mobile__phone-face--front .qr-scenario__screen {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .qr-mobile--visible .qr-mobile__phone-face--back {
+    animation: qrMobileBack 1.45s 0.18s ease both;
+  }
+
+  .qr-mobile--visible .qr-mobile__phone-face--front {
+    animation: qrMobileFront 0.58s 1.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .qr-mobile--visible .qr-mobile__sensor {
+    animation: qrMobileSensor 0.72s 0.42s ease both;
+  }
+
+  .qr-mobile__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .qr-mobile__steps span {
+    min-width: 0;
+    padding: 11px 7px;
+    color: #79837b;
+    font-size: 9px;
+    line-height: 1.25;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.065);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.022);
+  }
+
+  .qr-mobile__steps i {
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(141, 255, 53, 0.7);
+    font-style: normal;
+    font-family: ui-monospace, monospace;
+  }
+
+  @keyframes qrMobileBack {
+    0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+    22%, 72% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-5px) scale(0.985); }
+  }
+
+  @keyframes qrMobileFront {
+    from { opacity: 0; transform: translateY(12px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes qrMobileSensor {
+    0%, 100% { opacity: 0; transform: scale(0.94); }
+    42%, 72% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Purpose-built mobile Flow screen. */
+  .flow-section {
+    padding: 72px 0;
+    background: linear-gradient(180deg, rgba(4, 12, 8, 0.6), rgba(8, 18, 12, 0.82), rgba(4, 10, 7, 0.5));
+  }
+
+  .flow-section .flow-copy {
+    display: none;
+  }
+
+  .flow-grid {
+    display: block;
+  }
+
+  .mobile-flow {
+    position: relative;
+    overflow: hidden;
+    padding: 22px;
+    border: 1px solid rgba(141, 255, 53, 0.13);
+    border-radius: 25px;
+    background: linear-gradient(145deg, rgba(13, 26, 18, 0.97), rgba(3, 8, 5, 0.98));
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.32), inset 0 1px rgba(255, 255, 255, 0.045);
+    contain: paint;
+  }
+
+  .mobile-flow::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -110px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(103, 194, 58, 0.12), transparent 68%);
+  }
+
+  .mobile-flow__intro {
+    position: relative;
+    z-index: 2;
+  }
+
+  .mobile-flow__intro > span {
+    color: var(--green-bright);
+    font: 800 9px/1 ui-monospace, monospace;
+    letter-spacing: 0.18em;
+  }
+
+  .mobile-flow__intro h3 {
+    max-width: 290px;
+    margin: 15px 0 0;
+    color: #f3f6f3;
+    font-size: clamp(34px, 9.6vw, 40px);
+    line-height: 1.02;
+    letter-spacing: -0.046em;
+  }
+
+  .mobile-flow__intro p {
+    max-width: 310px;
+    margin: 15px 0 0;
+    color: #9ca59e;
+    font-size: 15px;
+    line-height: 1.52;
+  }
+
+  .mobile-flow__streak {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 148px;
+    margin-top: 26px;
+    padding: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(141, 255, 53, 0.14);
+    border-radius: 21px;
+    background: linear-gradient(135deg, rgba(103, 194, 58, 0.09), rgba(255, 255, 255, 0.025));
+  }
+
+  .mobile-flow__streak > div {
+    position: relative;
+    z-index: 2;
+    max-width: 68%;
+  }
+
+  .mobile-flow__streak span,
+  .mobile-flow__streak strong,
+  .mobile-flow__streak small {
+    display: block;
+  }
+
+  .mobile-flow__streak > div > span {
+    color: #819087;
+    font-size: 10px;
+    font-weight: 720;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mobile-flow__streak strong {
+    margin-top: 8px;
+    color: #f4f8f4;
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .mobile-flow__streak small {
+    margin-top: 10px;
+    color: #758078;
+    font-size: 9px;
+    line-height: 1.45;
+  }
+
+  .mobile-flow__flame {
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    z-index: 1;
+    width: 104px;
+    height: 112px;
+    pointer-events: none;
+    transform-origin: 50% 88%;
+    animation: mobileFlowPulse 3.2s ease-in-out infinite;
+  }
+
+  .mobile-flow__flame::before {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 0;
+    left: 4px;
+    height: 22px;
+    border-radius: 50%;
+    opacity: 0.38;
+    background: radial-gradient(ellipse, rgba(141, 255, 53, 0.28), transparent 70%);
+  }
+
+  .mobile-flow__flame i,
+  .mobile-flow__flame b {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    display: block;
+    transform: translateX(-50%);
+    transform-origin: 50% 100%;
+  }
+
+  .mobile-flow__flame i {
+    width: 70px;
+    height: 100px;
+    clip-path: polygon(50% 0, 67% 29%, 82% 48%, 91% 70%, 80% 89%, 54% 100%, 27% 94%, 10% 72%, 18% 47%, 35% 23%, 37% 57%);
+    background: linear-gradient(155deg, #b7ff5c, #65d72c 54%, #17673a);
+  }
+
+  .mobile-flow__flame b {
+    width: 36px;
+    height: 58px;
+    clip-path: polygon(52% 0, 79% 42%, 83% 68%, 68% 91%, 50% 100%, 25% 88%, 14% 63%, 27% 34%, 39% 64%);
+    background: linear-gradient(180deg, #efffc1, #aaff4f 58%, #65c72c);
+  }
+
+  .mobile-flow__milestones {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .mobile-flow__milestones > span {
+    display: grid;
+    place-items: center;
+    min-height: 54px;
+    color: #89928b;
+    font-size: 15px;
+    font-weight: 730;
+    line-height: 1;
+    border: 1px solid rgba(255, 255, 255, 0.065);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.022);
+  }
+
+  .mobile-flow__milestones > span.is-reached {
+    color: #dfffd2;
+    border-color: rgba(141, 255, 53, 0.24);
+    background: rgba(103, 194, 58, 0.1);
+  }
+
+  .mobile-flow__milestones small {
+    margin-top: 3px;
+    color: #68736b;
+    font-size: 7px;
+    font-weight: 650;
+  }
+
+  .mobile-flow__rewards {
+    display: grid;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .mobile-flow__rewards article {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 11px;
+    min-height: 72px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.065);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.022);
+  }
+
+  .mobile-flow__rewards article > span {
+    color: rgba(141, 255, 53, 0.56);
+    font: 760 9px/1 ui-monospace, monospace;
+  }
+
+  .mobile-flow__rewards strong,
+  .mobile-flow__rewards p {
+    display: block;
+    margin: 0;
+  }
+
+  .mobile-flow__rewards strong {
+    color: #e2e8e3;
+    font-size: 14px;
+  }
+
+  .mobile-flow__rewards p {
+    margin-top: 5px;
+    color: #7f8a82;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .mobile-flow__rewards article > i {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    color: #0b210e;
+    font-size: 11px;
+    font-style: normal;
+    border-radius: 50%;
+    background: #8dff35;
+  }
+
+  @keyframes mobileFlowPulse {
+    0%, 100% { opacity: 0.9; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.025); }
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-flow {
+    padding: 19px;
+  }
+
+  .mobile-flow__streak {
+    padding: 18px;
+  }
+
+  .mobile-flow__flame {
+    right: 4px;
+    width: 96px;
+    height: 104px;
+  }
+
+  .qr-mobile__phone {
+    width: min(69vw, 248px);
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .qr-mobile__phone-face--back,
+  .qr-mobile__phone-face--front,
+  .qr-mobile__sensor,
+  .mobile-flow__flame {
+    animation: none !important;
+  }
+
+  .qr-mobile__phone-face--back {
+    display: none;
+  }
+
+  .qr-mobile__phone-face--front {
+    opacity: 1;
+    transform: none;
+  }
+}

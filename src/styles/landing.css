@@ -339,10 +339,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--green-bright); 
 .food-art--khinkali::before { background: radial-gradient(circle at 40% 38%, #dfd4b3 0 9%, #a69a79 10% 21%, #e6ddc2 22% 34%, #495b3e 35% 44%, #1b2e20 45%); }
 .food-art--photo::before { display: none; }
 .food-art--photo::after { z-index: 1; background: linear-gradient(180deg, transparent 42%, rgba(2,7,6,.68) 100%); }
-.food-art--photo > img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .48s var(--ease), filter .48s var(--ease); }
-.food-art--protein-shake > img { object-position: center 58%; }
-.food-art--brownie > img, .food-art--syrniki > img { object-position: center 54%; }
-.food-card:hover .food-art--photo > img { transform: scale(1.04); filter: saturate(1.08) brightness(1.04); }
+.food-art--photo > picture { position: absolute; inset: 0; z-index: 0; display: block; }
+.food-art--photo > picture > img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .48s var(--ease), filter .48s var(--ease); }
+.food-art--protein-shake > picture > img { object-position: center 58%; }
+.food-art--brownie > picture > img, .food-art--syrniki > picture > img { object-position: center 54%; }
+.food-card:hover .food-art--photo > picture > img { transform: scale(1.04); filter: saturate(1.08) brightness(1.04); }
 .food-art--shake::before { inset: 10% 34%; border: 7px solid rgba(230,235,224,.32); border-radius: 18px 18px 34px 34px; background: linear-gradient(180deg, #9aaa75 0 15%, #637f48 16% 84%, #d8e1d1 85%); transform: perspective(400px) rotateX(8deg) scale(.86); }
 .food-card:hover .food-art--shake::before { transform: perspective(400px) rotateX(8deg) scale(.92); }
 .food-art--brownie::before { inset: 24% 24%; border: 7px solid rgba(230,230,220,.8); border-radius: 50%; background: radial-gradient(circle at 40% 35%, #a66a45 0 4%, #4b291e 5% 17%, #24150f 18% 33%, #6d3f29 34% 47%, #1c100b 48%); }
