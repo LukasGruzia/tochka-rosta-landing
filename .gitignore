@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*
+!.env.example
+.vercel/
+.agents/
+.codex/
+outputs/
+work/
+*.log
+*.tsbuildinfo
+.DS_Store
