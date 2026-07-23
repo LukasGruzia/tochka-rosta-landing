@@ -1508,58 +1508,76 @@
   .mobile-flow__streak {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    min-height: 148px;
-    margin-top: 26px;
-    padding: 22px;
+    justify-content: center;
+    gap: 14px;
+    min-height: 0;
+    height: auto;
+    margin-top: 22px;
+    padding: 26px 24px;
     overflow: hidden;
+    text-align: center;
     border: 1px solid rgba(141, 255, 53, 0.14);
     border-radius: 21px;
     background: linear-gradient(135deg, rgba(103, 194, 58, 0.09), rgba(255, 255, 255, 0.025));
   }
 
-  .mobile-flow__streak > div {
-    position: relative;
-    z-index: 2;
-    max-width: 68%;
+  .mobile-flow__streak::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image:
+      linear-gradient(rgba(141, 255, 53, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(141, 255, 53, 0.12) 1px, transparent 1px);
+    background-size: 34px 34px;
   }
 
   .mobile-flow__streak span,
   .mobile-flow__streak strong,
   .mobile-flow__streak small {
+    position: relative;
+    z-index: 2;
     display: block;
   }
 
-  .mobile-flow__streak > div > span {
-    color: #819087;
-    font-size: 10px;
-    font-weight: 720;
-    letter-spacing: 0.08em;
+  .mobile-flow__streak .mobile-flow__streak-label {
+    color: var(--green-bright);
+    font-size: 12px;
+    font-weight: 780;
+    line-height: 1;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
   }
 
   .mobile-flow__streak strong {
-    margin-top: 8px;
+    margin: 0;
     color: #f4f8f4;
-    font-size: 34px;
+    font-size: clamp(34px, 10vw, 44px);
+    font-weight: 850;
     line-height: 1;
     letter-spacing: -0.05em;
+    white-space: nowrap;
   }
 
   .mobile-flow__streak small {
-    margin-top: 10px;
-    color: #758078;
-    font-size: 9px;
-    line-height: 1.45;
+    margin: 0;
+    color: #a5b4a9;
+    font-size: 15px;
+    line-height: 1.35;
   }
 
   .mobile-flow__flame {
-    position: absolute;
-    top: 18px;
-    right: 12px;
-    z-index: 1;
-    width: 104px;
-    height: 112px;
+    position: relative;
+    top: auto;
+    right: auto;
+    z-index: 2;
+    width: 120px;
+    max-width: 130px;
+    height: 128px;
+    flex-shrink: 0;
     pointer-events: none;
     transform-origin: 50% 88%;
     animation: mobileFlowPulse 3.2s ease-in-out infinite;
@@ -1699,13 +1717,14 @@
   }
 
   .mobile-flow__streak {
-    padding: 18px;
+    gap: 13px;
+    padding: 24px 18px;
   }
 
   .mobile-flow__flame {
-    right: 4px;
-    width: 96px;
-    height: 104px;
+    right: auto;
+    width: 116px;
+    height: 124px;
   }
 
   .qr-mobile__phone {

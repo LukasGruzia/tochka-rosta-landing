@@ -196,6 +196,7 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
 
 function MobileFlowExperience({ rewards, currentDays, className }: Required<FlowExperienceProps>) {
   const milestones = rewards.map(({ days }) => days)
+  const displayedDays = Math.max(currentDays, 14)
 
   return (
     <motion.div
@@ -211,21 +212,19 @@ function MobileFlowExperience({ rewards, currentDays, className }: Required<Flow
         <p>Отмечай питание, собирай дни подряд и получай награды за стабильность.</p>
       </header>
 
-      <section className="mobile-flow__streak" aria-label={`Текущий поток — ${currentDays} дней`}>
-        <div>
-          <span>Текущий поток</span>
-          <strong>{currentDays} дней</strong>
-          <small>Серия активна · следующий рубеж 14 дней</small>
-        </div>
+      <section className="mobile-flow__streak" aria-label={`Текущий поток — ${displayedDays} дней`}>
+        <span className="mobile-flow__streak-label">Серия активна</span>
         <span className="mobile-flow__flame" aria-hidden="true">
           <i />
           <b />
         </span>
+        <strong>{displayedDays} дней</strong>
+        <small>+10% к бонусам</small>
       </section>
 
       <div className="mobile-flow__milestones" aria-label="Линейка наград">
         {milestones.map((days) => (
-          <span className={days <= currentDays ? 'is-reached' : ''} key={days}>
+          <span className={days <= displayedDays ? 'is-reached' : ''} key={days}>
             {days}
             <small>дн.</small>
           </span>
