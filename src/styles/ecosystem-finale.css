@@ -214,6 +214,38 @@
   .ecosystem-heading p { font-size: 17px; line-height: 1.58; }
   .ecosystem-card { min-height: 500px; padding: 18px; border-radius: 25px; }
   .ecosystem-visual { height: 270px; margin-top: 24px; }
+  .ecosystem-visual--flow {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    padding: 14px 16px 0;
+  }
+  .eco-flow__flame {
+    flex: 0 0 105px;
+    width: 105px;
+    height: 166px;
+    margin: 0;
+    transform: none;
+  }
+  .eco-flow__flame .flow-flame {
+    width: 105px;
+  }
+  .eco-flow__status {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    margin-left: 0;
+  }
+  .eco-flow__status small,
+  .eco-flow__status strong,
+  .eco-flow__status span {
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .eco-flow__status small { font-size: 9px; }
+  .eco-flow__status strong { font-size: 27px; }
+  .eco-flow__status span { font-size: 11px; }
   .ecosystem-card__copy h3 { font-size: 27px; }
   .ecosystem-card__copy p { font-size: 14px; line-height: 1.65; }
   .ecosystem-caption { gap: 9px; }

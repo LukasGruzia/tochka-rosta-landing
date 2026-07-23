@@ -108,9 +108,14 @@
 
 .location-map__districts text {
   fill: rgba(194, 205, 197, 0.23);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.19em;
+}
+
+.location-map__districts .location-map__district--zareka,
+.location-map__districts .location-map__district--center {
+  fill: rgba(194, 205, 197, 0.34);
 }
 
 .location-map__districts .location-map__river-name {
@@ -245,6 +250,18 @@
   .location-map__topline { top: 20px; left: 20px; right: 20px; }
   .location-map__status { display: none; }
   .location-map__canvas { inset: 38px -11% 4px; width: 122%; height: calc(100% - 42px); }
+  .location-map__districts text {
+    font-size: 20px;
+    letter-spacing: 0.12em;
+  }
+  .location-map__districts .location-map__district--zareka,
+  .location-map__districts .location-map__district--center {
+    fill: rgba(210, 220, 213, 0.46);
+  }
+  .location-map__districts .location-map__river-name {
+    font-size: 15px;
+    letter-spacing: 0.34em;
+  }
   .location-map__marker { top: 56%; left: 52%; gap: 4px; transform: translate(-10px, -50%) scale(0.84); transform-origin: left center; }
   .location-map__marker-copy { min-width: 150px; padding: 10px 11px 11px; }
   .location-map__marker-copy strong { font-size: 10px; }

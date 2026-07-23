@@ -150,8 +150,8 @@ export default function LocationMap({ className = '' }: LocationMapProps) {
         />
 
         <g className="location-map__districts" aria-hidden="true">
-          <text x="176" y="157">ЗАРЕКА</text>
-          <text x="360" y="155">ЦЕНТР</text>
+          <text className="location-map__district location-map__district--zareka" x="176" y="145">ЗАРЕКА</text>
+          <text className="location-map__district location-map__district--center" x="245" y="365">ЦЕНТР</text>
           <text x="523" y="445">ВОСТОЧНЫЙ</text>
           <text className="location-map__river-name" x="80" y="201">Т У Р А</text>
         </g>
