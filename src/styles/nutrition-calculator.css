@@ -318,6 +318,25 @@
   background: linear-gradient(90deg, rgba(214, 168, 79, 0.045), transparent);
 }
 
+.nutrition-result__journey-message {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: -4px 0 15px;
+  color: #c5d1c7;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.nutrition-result__journey-message i {
+  flex: 0 0 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8dff35;
+  box-shadow: 0 0 12px rgba(141, 255, 53, 0.66);
+}
+
 .nutrition-result__plan-head {
   display: flex;
   align-items: flex-end;

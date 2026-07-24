@@ -157,7 +157,8 @@ export function EcosystemSection() {
 }
 
 type CinematicFinalCTAProps = {
-  onStart?: () => void
+  onCalculate?: () => void
+  onDemo?: () => void
 }
 
 function ArrowIcon() {
@@ -191,7 +192,7 @@ function DailyRationCard({ reduceMotion }: { reduceMotion: boolean }) {
   )
 }
 
-export function CinematicFinalCTA({ onStart }: CinematicFinalCTAProps) {
+export function CinematicFinalCTA({ onCalculate, onDemo }: CinematicFinalCTAProps) {
   const reduceMotion = Boolean(useReducedMotion())
   const [showToast, setShowToast] = useState(false)
   const toastTimer = useRef<number | null>(null)
@@ -200,13 +201,20 @@ export function CinematicFinalCTA({ onStart }: CinematicFinalCTAProps) {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current)
   }, [])
 
-  const handleStart = () => {
-    if (onStart) onStart()
-    else window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
-
+  const showDemoToast = () => {
     setShowToast(true)
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current)
     toastTimer.current = window.setTimeout(() => setShowToast(false), 2800)
+  }
+
+  const handleCalculate = () => {
+    if (onCalculate) onCalculate()
+    else window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
+  }
+
+  const handleDemo = () => {
+    onDemo?.()
+    showDemoToast()
   }
 
   return (
@@ -254,19 +262,30 @@ export function CinematicFinalCTA({ onStart }: CinematicFinalCTAProps) {
           viewport={{ once: false, amount: 0.34 }}
           transition={{ duration: reduceMotion ? 0 : 1, ease }}
         >
-          <span className="cinematic-final__eyebrow"><i /> ТВОЯ ТОЧКА СТАРТА <i /></span>
-          <h2 id="cinematic-final-title">Начни путь<br /><em>с Точкой Роста.</em></h2>
-          <p>Проект о том, как сделать полезное питание понятным, удобным и привычным.</p>
-          <motion.button
-            className="cinematic-final__button"
-            type="button"
-            onClick={handleStart}
-            whileHover={reduceMotion ? undefined : { y: -3, scale: 1.025 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.985 }}
-          >
-            Открыть демонстрацию <ArrowIcon />
-          </motion.button>
-          <div className="cinematic-final__signature"><span /> ТОЧКА РОСТА · СИЛА В БАЛАНСЕ <span /></div>
+          <span className="cinematic-final__eyebrow"><i /> СИСТЕМА НА КАЖДЫЙ ДЕНЬ <i /></span>
+          <h2 id="cinematic-final-title">Питание становится<br /><em>системой.</em></h2>
+          <p>Готовые блюда, персональный расчёт и привычка, которую легче сохранить.</p>
+          <div className="cinematic-final__actions">
+            <motion.button
+              className="cinematic-final__button"
+              type="button"
+              onClick={handleCalculate}
+              whileHover={reduceMotion ? undefined : { y: -3, scale: 1.025 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+            >
+              Рассчитать свой рацион <ArrowIcon />
+            </motion.button>
+            <motion.button
+              className="cinematic-final__button cinematic-final__button--secondary"
+              type="button"
+              onClick={handleDemo}
+              whileHover={reduceMotion ? undefined : { y: -3 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+            >
+              Посмотреть демонстрацию
+            </motion.button>
+          </div>
+          <div className="cinematic-final__signature"><span /> Презентационный прототип проекта Луки Чихладзе, город Тюмень <span /></div>
         </motion.div>
       </div>
 

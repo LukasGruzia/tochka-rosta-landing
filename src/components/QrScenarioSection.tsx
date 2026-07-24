@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import caesarPackage from '../assets/product/caesar-package.png'
 import caesarQr from '../assets/product/caesar-qr.png'
@@ -56,13 +56,35 @@ function PhoneBack({ scanOpacity, successOpacity, reduceMotion }: PhoneBackProps
   )
 }
 
-function ProductScreen({ imageSrc = caesarFood }: { imageSrc?: string }) {
+type ProductScreenProps = {
+  imageSrc?: string
+  isAdded: boolean
+  onAdd: () => void
+}
+
+function ProductScreen({ imageSrc = caesarFood, isAdded, onAdd }: ProductScreenProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const timerRef = useRef<number | null>(null)
   const macros = [
     ['320', 'ккал'],
     ['30 г', 'белки'],
     ['12 г', 'жиры'],
     ['18 г', 'углеводы'],
   ]
+
+  useEffect(() => () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+  }, [])
+
+  const handleAdd = () => {
+    if (isAdded || isLoading) return
+    setIsLoading(true)
+    timerRef.current = window.setTimeout(() => {
+      onAdd()
+      setIsLoading(false)
+      timerRef.current = null
+    }, 420)
+  }
 
   return (
     <div className="qr-product-screen">
@@ -75,7 +97,7 @@ function ProductScreen({ imageSrc = caesarFood }: { imageSrc?: string }) {
       </div>
 
       <div className="qr-product-screen__body">
-        <span className="qr-product-screen__ready"><i /> Готово к покупке</span>
+        <span className="qr-product-screen__ready"><i /> {isAdded ? 'Добавлено в день' : 'Демо-карточка блюда'}</span>
         <h3>Салат Цезарь</h3>
         <p>Курица, романо, сыр и фирменный соус.</p>
 
@@ -92,7 +114,16 @@ function ProductScreen({ imageSrc = caesarFood }: { imageSrc?: string }) {
 
         <div className="qr-product-screen__action">
           <strong>300 ₽</strong>
-          <button type="button" tabIndex={-1}>Добавить в рацион <span>+</span></button>
+          <button
+            type="button"
+            className={isAdded ? 'is-added' : ''}
+            disabled={isLoading || isAdded}
+            aria-live="polite"
+            onClick={handleAdd}
+          >
+            {isLoading ? 'Добавляем…' : isAdded ? 'Добавлено в сегодняшний рацион' : 'Добавить в рацион'}
+            <span>{isAdded ? '✓' : '+'}</span>
+          </button>
         </div>
       </div>
       <span className="qr-phone-home" aria-hidden="true" />
@@ -100,7 +131,12 @@ function ProductScreen({ imageSrc = caesarFood }: { imageSrc?: string }) {
   )
 }
 
-function DesktopQrScenarioSection() {
+type QrScenarioSectionProps = {
+  isAdded?: boolean
+  onAdd?: () => void
+}
+
+function DesktopQrScenarioSection({ isAdded = false, onAdd = () => undefined }: QrScenarioSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
   const { scrollYProgress } = useScroll({
@@ -180,7 +216,7 @@ function DesktopQrScenarioSection() {
                 <div className="qr-scenario__phone-shell">
                   <span className="qr-scenario__dynamic-island" aria-hidden="true" />
                   <motion.div className="qr-scenario__screen qr-scenario__screen--product" style={reduceMotion ? { opacity: 1 } : { opacity: productOpacity, scale: productScale, filter: productBlur }}>
-                    <ProductScreen />
+                    <ProductScreen isAdded={isAdded} onAdd={onAdd} />
                   </motion.div>
                   <motion.span className="qr-scenario__screen-off" style={reduceMotion ? { opacity: 0 } : { opacity: screenOffOpacity }} aria-hidden="true" />
                 </div>
@@ -206,7 +242,7 @@ function DesktopQrScenarioSection() {
   )
 }
 
-function MobileQrScenarioSection() {
+function MobileQrScenarioSection({ isAdded = false, onAdd = () => undefined }: QrScenarioSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const isVisible = useInView(sectionRef, { once: true, amount: 0.2, margin: '-8% 0px -8% 0px' })
 
@@ -246,7 +282,7 @@ function MobileQrScenarioSection() {
               <div className="qr-scenario__phone-shell">
                 <span className="qr-scenario__dynamic-island" aria-hidden="true" />
                 <div className="qr-scenario__screen qr-scenario__screen--product">
-                  <ProductScreen imageSrc={caesarFoodMobile} />
+                  <ProductScreen imageSrc={caesarFoodMobile} isAdded={isAdded} onAdd={onAdd} />
                 </div>
               </div>
             </div>
@@ -263,9 +299,11 @@ function MobileQrScenarioSection() {
   )
 }
 
-export function QrScenarioSection() {
+export function QrScenarioSection({ isAdded = false, onAdd = () => undefined }: QrScenarioSectionProps) {
   const isMobile = useIsMobile()
-  return isMobile ? <MobileQrScenarioSection /> : <DesktopQrScenarioSection />
+  return isMobile
+    ? <MobileQrScenarioSection isAdded={isAdded} onAdd={onAdd} />
+    : <DesktopQrScenarioSection isAdded={isAdded} onAdd={onAdd} />
 }
 
 export default QrScenarioSection

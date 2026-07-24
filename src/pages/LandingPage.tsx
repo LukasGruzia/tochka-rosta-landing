@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import logoMain from '../assets/brand/logo-main.png'
 import appProfile from '../assets/app/app-profile.png'
@@ -7,14 +7,36 @@ import khinkaliMobileImage from '../assets/mobile/food/khinkali.jpg'
 import { CinematicBackground } from '../components/CinematicBackground'
 import { BrandPreloader, ScrollStoryProgress } from '../components/CinematicShell'
 import { ComparisonSection } from '../components/ComparisonSection'
+import { DailyProgress } from '../components/DailyProgress'
 import { CinematicFinalCTA, EcosystemSection } from '../components/EcosystemFinale'
 import { FlowExperience } from '../components/FlowExperience'
+import { GuidedDemo, guidedDemoStepsCount } from '../components/GuidedDemo'
+import { InteractiveDayPlanner } from '../components/InteractiveDayPlanner'
 import { InteractiveHowItWorks, UserDayJourney } from '../components/InteractiveStory'
 import { LiveFlowAppScreen, LiveFoodAppScreen } from '../components/LiveAppScreens'
 import LocationMap from '../components/LocationMap'
+import { PresentationMode } from '../components/PresentationMode'
 import { QrScenarioSection } from '../components/QrScenarioSection'
 import { foodShowcase } from '../data/foodShowcase'
+import type { MealSlot } from '../data/mealPlans'
 import { useIsMobile } from '../hooks/useIsMobile'
+import type { Goal, NutritionInput, NutritionResult } from '../utils/nutritionCalculator'
+
+const demoStorageKey = 'tochka-rosta-demo-meals'
+const mealSlots: MealSlot[] = ['breakfast', 'lunch', 'snack', 'dinner']
+
+function readDemoSlots(): MealSlot[] {
+  if (typeof window === 'undefined') return []
+
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(demoStorageKey) ?? '[]')
+    return Array.isArray(stored)
+      ? stored.filter((slot): slot is MealSlot => mealSlots.includes(slot))
+      : []
+  } catch {
+    return []
+  }
+}
 
 const navItems = [
   ['concept', 'Концепция'],
@@ -69,8 +91,8 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return (
     <motion.div
       className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 16 : 34, ...(isMobile ? {} : { filter: 'blur(10px)' }) }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, ...(isMobile ? {} : { filter: 'blur(0px)' }) }}
+      initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 16 : 34, filter: isMobile ? 'blur(0px)' : 'blur(10px)' }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: isMobile, amount: isMobile ? 0.12 : 0.16, margin: '-4% 0px -4% 0px' }}
       transition={{ duration: lightMotion ? 0.5 : 0.72, delay: isMobile ? Math.min(delay, 0.08) : delay, ease: [0.16, 1, 0.3, 1] }}
     >
@@ -118,9 +140,17 @@ export function LandingPage() {
   const [activeSection, setActiveSection] = useState('concept')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [heroReady, setHeroReady] = useState(false)
+  const [plannerGoal, setPlannerGoal] = useState<Goal>('maintain')
+  const [targetCalories, setTargetCalories] = useState<number | null>(null)
+  const [addedSlots, setAddedSlots] = useState<MealSlot[]>(readDemoSlots)
+  const [progressVisible, setProgressVisible] = useState(false)
+  const [plannerHighlighted, setPlannerHighlighted] = useState(false)
+  const [guidedStep, setGuidedStep] = useState<number | null>(null)
+  const [presentationActive, setPresentationActive] = useState(false)
   const isMobile = useIsMobile()
   const khinkaliSectionRef = useRef<HTMLDivElement>(null)
   const appSectionRef = useRef<HTMLElement>(null)
+  const highlightTimerRef = useRef<number | null>(null)
   const reduceMotion = useReducedMotion()
   const lightMotion = Boolean(reduceMotion) || isMobile
   const { scrollYProgress } = useScroll()
@@ -159,10 +189,75 @@ export function LandingPage() {
     return () => observer.disconnect()
   }, [observedIds])
 
+  useEffect(() => {
+    window.localStorage.setItem(demoStorageKey, JSON.stringify(addedSlots))
+  }, [addedSlots])
+
+  useEffect(() => {
+    if (guidedStep === 2) highlightPlanner()
+  }, [guidedStep])
+
+  useEffect(() => () => {
+    if (highlightTimerRef.current !== null) window.clearTimeout(highlightTimerRef.current)
+  }, [])
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
     setMobileNavOpen(false)
   }
+
+  const highlightPlanner = () => {
+    setPlannerHighlighted(true)
+    if (highlightTimerRef.current !== null) window.clearTimeout(highlightTimerRef.current)
+    highlightTimerRef.current = window.setTimeout(() => setPlannerHighlighted(false), 1700)
+  }
+
+  const handleCalculated = (input: NutritionInput, result: NutritionResult) => {
+    setPlannerGoal(input.goal)
+    setTargetCalories(result.calories)
+    setProgressVisible(true)
+  }
+
+  const handleShowMealPlan = () => {
+    highlightPlanner()
+    setProgressVisible(true)
+    scrollTo('day-plan')
+  }
+
+  const handleToggleSlot = (slot: MealSlot) => {
+    setAddedSlots((current) => current.includes(slot) ? current.filter((item) => item !== slot) : [...current, slot])
+    setProgressVisible(true)
+  }
+
+  const handleQrAdd = () => {
+    setPlannerGoal('lose')
+    setAddedSlots((current) => current.includes('lunch') ? current : [...current, 'lunch'])
+    setProgressVisible(true)
+    highlightPlanner()
+  }
+
+  const resetDemo = () => {
+    setAddedSlots([])
+    setTargetCalories(null)
+    setPlannerGoal('maintain')
+    setProgressVisible(false)
+  }
+
+  const startGuidedDemo = () => {
+    setPresentationActive(false)
+    setGuidedStep(0)
+    setProgressVisible(true)
+  }
+
+  const advanceGuidedDemo = () => {
+    setGuidedStep((current) => {
+      if (current === null || current >= guidedDemoStepsCount - 1) return null
+      return current + 1
+    })
+  }
+
+  const exitPresentation = useCallback(() => setPresentationActive(false), [])
+  const dayComplete = addedSlots.length === mealSlots.length
 
   return (
     <div className="landing-shell">
@@ -200,10 +295,10 @@ export function LandingPage() {
                 <span>Healthy Hub</span><i />Тюмень · ARSIB Tower · 2026
               </motion.div>
               <motion.h1
-                initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 12 : 45, ...(isMobile ? {} : { filter: 'blur(14px)' }) }}
+                initial={reduceMotion ? false : { opacity: 0, y: isMobile ? 12 : 45, filter: isMobile ? 'blur(0px)' : 'blur(14px)' }}
                 animate={heroReady
-                  ? { opacity: 1, y: 0, ...(isMobile ? {} : { filter: 'blur(0)' })}
-                  : { opacity: 0, y: isMobile ? 12 : 45, ...(isMobile ? {} : { filter: 'blur(14px)' }) }}
+                  ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+                  : { opacity: 0, y: isMobile ? 12 : 45, filter: isMobile ? 'blur(0px)' : 'blur(14px)' }}
                 transition={{ duration: lightMotion ? 0.48 : 0.9, delay: isMobile ? 0.04 : 0.12, ease: [0.16, 1, 0.3, 1] }}
               >
                 ТОЧКА<br /><em>РОСТА</em>
@@ -216,7 +311,7 @@ export function LandingPage() {
               </motion.p>
               <motion.div className="hero-actions" initial={{ opacity: 0, y: 20 }} animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.7, delay: 0.56 }}>
                 <button className="button button--primary" onClick={() => scrollTo('implementation')}>Начать путь <ArrowIcon /></button>
-                <button className="button button--ghost" onClick={() => scrollTo('concept')}>Смотреть концепцию</button>
+                <button className="button button--ghost" onClick={startGuidedDemo}>Запустить демо</button>
               </motion.div>
               <motion.p className="hero-note" initial={{ opacity: 0 }} animate={heroReady ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 0.72 }}>
                 <span /> Первая точка — ARSIB Tower, Тюмень.
@@ -225,10 +320,10 @@ export function LandingPage() {
 
             <motion.div
               className="hero-visual"
-              initial={reduceMotion ? false : { opacity: 0, scale: isMobile ? 0.96 : 0.82, ...(isMobile ? {} : { filter: 'blur(18px)' }) }}
+              initial={reduceMotion ? false : { opacity: 0, scale: isMobile ? 0.96 : 0.82, filter: isMobile ? 'blur(0px)' : 'blur(18px)' }}
               animate={heroReady
-                ? { opacity: 1, scale: 1, ...(isMobile ? {} : { filter: 'blur(0)' })}
-                : { opacity: 0, scale: isMobile ? 0.96 : 0.82, ...(isMobile ? {} : { filter: 'blur(18px)' }) }}
+                ? { opacity: 1, scale: 1, filter: 'blur(0px)' }
+                : { opacity: 0, scale: isMobile ? 0.96 : 0.82, filter: isMobile ? 'blur(0px)' : 'blur(18px)' }}
               transition={{ duration: lightMotion ? 0.52 : 1.15, delay: isMobile ? 0.06 : 0.02, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="logo-halo" />
@@ -289,7 +384,25 @@ export function LandingPage() {
           </div>
         </section>
 
-        <InteractiveHowItWorks />
+        <InteractiveHowItWorks
+          guidedStep={guidedStep}
+          onCalculated={handleCalculated}
+          onShowMealPlan={handleShowMealPlan}
+        />
+        <InteractiveDayPlanner
+          goal={plannerGoal}
+          targetCalories={targetCalories}
+          addedSlots={addedSlots}
+          highlighted={plannerHighlighted}
+          onGoalChange={(goal) => {
+            setPlannerGoal(goal)
+            setTargetCalories(null)
+            setProgressVisible(true)
+          }}
+          onToggleSlot={handleToggleSlot}
+          onDetails={() => scrollTo('food')}
+          onReset={resetDemo}
+        />
         <EcosystemSection />
 
         <section className="section location section-tech-grid" id="location">
@@ -309,7 +422,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <QrScenarioSection />
+        <QrScenarioSection isAdded={addedSlots.includes('lunch')} onAdd={handleQrAdd} />
 
         <section className="section app-section section-tech-grid" id="app" ref={appSectionRef}>
           <div className="container">
@@ -433,26 +546,46 @@ export function LandingPage() {
             {!isMobile && (
               <div className="flow-copy">
                 <span className="section-index" aria-hidden="true">09 / 10</span>
-                <SectionHeading eyebrow="Система «Поток»" title="Закрывай день. Сохраняй серию." text="Закрытые дни превращаются в бонусы." />
+                <SectionHeading eyebrow="Система «Поток»" title="Регулярность превращается в результат." text="Закрывай дни питания, сохраняй серию и открывай награды за стабильность." />
                 <Reveal className="flow-current glass-card">
-                  <div><small>Текущий поток</small><strong>7 дней</strong></div>
+                  <div><small>Текущий поток</small><strong>{dayComplete ? 8 : 7} дней</strong></div>
                   <div className="flow-progress"><motion.i initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} /></div>
-                  <span>До следующей награды — 7 дней</span>
+                  <span>{dayComplete ? 'День закрыт. Поток продолжается.' : 'До следующей награды — 7 дней'}</span>
                 </Reveal>
               </div>
             )}
-            <Reveal delay={0.14}><FlowExperience /></Reveal>
+            <Reveal delay={0.14}><FlowExperience currentDays={dayComplete ? 8 : 7} dayComplete={dayComplete} /></Reveal>
           </div>
         </section>
 
-        <CinematicFinalCTA onStart={() => scrollTo('implementation')} />
+        <CinematicFinalCTA onCalculate={() => scrollTo('implementation')} onDemo={startGuidedDemo} />
       </main>
+
+      <DailyProgress
+        visible={progressVisible}
+        addedSlots={addedSlots}
+        onClose={() => setProgressVisible(false)}
+        onOpenFlow={() => scrollTo('flow')}
+      />
+      <GuidedDemo step={guidedStep} onNext={advanceGuidedDemo} onSkip={() => setGuidedStep(null)} />
+      <PresentationMode active={presentationActive} isMobile={isMobile} onExit={exitPresentation} />
 
       <footer>
         <div className="container">
           <span>© 2026 Точка Роста</span>
           <span>Проект Луки Чихладзе, город Тюмень</span>
-          <span>Готовая еда и рацион · Тюмень</span>
+          {!isMobile && (
+            <button
+              className="presentation-toggle"
+              type="button"
+              onClick={() => {
+                setGuidedStep(null)
+                setPresentationActive(true)
+              }}
+            >
+              Режим презентации
+            </button>
+          )}
         </div>
       </footer>
     </div>

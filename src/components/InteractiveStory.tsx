@@ -1,17 +1,13 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
   motion,
   useInView,
-  useMotionValueEvent,
   useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
 } from 'framer-motion'
 import { foodShowcase } from '../data/foodShowcase'
 import { NutritionCalculator, NutritionResultPanel } from './NutritionCalculator'
-import type { NutritionInput, NutritionResult } from '../utils/nutritionCalculator'
+import { calculateNutrition, type NutritionInput, type NutritionResult } from '../utils/nutritionCalculator'
 import '../styles/interactive-story.css'
 
 type StepVisualProps = {
@@ -48,38 +44,38 @@ const steps: StoryStep[] = [
 
 const journeyItems = [
   {
-    time: '08:10',
-    title: 'Утро',
-    body: 'Приложение показывает норму КБЖУ.',
-    meta: '2 140 ккал',
+    time: '08:00',
+    title: 'План',
+    body: 'Приложение собирает план питания.',
+    meta: 'Рацион готов',
     icon: 'sun',
   },
   {
-    time: '13:20',
+    time: '12:30',
     title: 'Обед',
-    body: 'Выбираешь готовое блюдо под свой план.',
-    meta: '520 ккал',
+    body: 'Ты выбираешь готовый обед рядом с работой или учёбой.',
+    meta: 'Блюдо выбрано',
+    icon: 'bowl',
+  },
+  {
+    time: '12:32',
+    title: 'QR',
+    body: 'QR-код добавляет блюдо в рацион.',
+    meta: '+1 приём пищи',
     icon: 'bowl',
   },
   {
     time: '18:00',
-    title: 'Тренировка',
-    body: 'После нагрузки берёшь протеиновый коктейль.',
-    meta: '32 г белка',
+    title: 'Остаток дня',
+    body: 'Приложение показывает остаток калорий и КБЖУ.',
+    meta: 'План обновлён',
     icon: 'pulse',
-  },
-  {
-    time: '20:30',
-    title: 'Ужин',
-    body: 'Вечером отмечаешь день в Потоке.',
-    meta: 'День закрыт',
-    icon: 'moon',
   },
   {
     time: '21:00',
     title: 'Поток',
-    body: 'Получаешь прогресс и бонусы.',
-    meta: '+1 день',
+    body: 'День закрывается, а серия «Потока» продолжается.',
+    meta: 'День +1',
     icon: 'flame',
   },
 ]
@@ -182,16 +178,54 @@ function FoodVisual({ reduceMotion }: StepVisualProps) {
   )
 }
 
-export function InteractiveHowItWorks() {
+type InteractiveHowItWorksProps = {
+  guidedStep?: number | null
+  onCalculated?: (input: NutritionInput, result: NutritionResult) => void
+  onShowMealPlan?: () => void
+}
+
+const guidedDemoInput: NutritionInput = {
+  name: 'Лука',
+  gender: 'male',
+  age: 30,
+  heightCm: 178,
+  weightKg: 76,
+  trainingLevel: 'medium',
+  goal: 'maintain',
+  preference: 'all',
+}
+
+export function InteractiveHowItWorks({
+  guidedStep = null,
+  onCalculated,
+  onShowMealPlan,
+}: InteractiveHowItWorksProps) {
   const [activeStep, setActiveStep] = useState(0)
   const [nutritionInput, setNutritionInput] = useState<NutritionInput | null>(null)
   const [nutritionResult, setNutritionResult] = useState<NutritionResult | null>(null)
+  const guidedCalculationRunRef = useRef(false)
   const reduceMotion = Boolean(useReducedMotion())
 
   const handleNutritionCalculated = (input: NutritionInput, result: NutritionResult) => {
     setNutritionInput(input)
     setNutritionResult(result)
     setActiveStep(1)
+    onCalculated?.(input, result)
+  }
+
+  useEffect(() => {
+    if (guidedStep === 0) setActiveStep(0)
+    if (guidedStep !== 1) guidedCalculationRunRef.current = false
+    if (guidedStep === 1 && !guidedCalculationRunRef.current) {
+      guidedCalculationRunRef.current = true
+      const result = calculateNutrition(guidedDemoInput)
+      handleNutritionCalculated(guidedDemoInput, result)
+    }
+  }, [guidedStep])
+
+  const handleShowMealPlan = () => {
+    setActiveStep(2)
+    onShowMealPlan?.()
   }
 
   return (
@@ -288,7 +322,7 @@ export function InteractiveHowItWorks() {
                       result={nutritionResult}
                       reduceMotion={reduceMotion}
                       onEdit={() => setActiveStep(0)}
-                      onShowFood={() => setActiveStep(2)}
+                      onShowFood={handleShowMealPlan}
                     />
                   )}
                   {activeStep === 1 && (!nutritionInput || !nutritionResult) && (
@@ -333,27 +367,7 @@ function JourneyIcon({ type }: { type: string }) {
 export function UserDayJourney() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
-  const journeyInView = useInView(sectionRef, { amount: 0.2 })
-  const [activeJourneyIndex, setActiveJourneyIndex] = useState(0)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 78%', 'end 38%'],
-  })
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 88, damping: 24, mass: 0.45 })
-  const routePosition = useTransform(smoothProgress, (value) => `${Math.max(0, Math.min(1, value)) * 100}%`)
-
-  useMotionValueEvent(smoothProgress, 'change', (value) => {
-    if (reduceMotion) return
-
-    const nextIndex = Math.min(
-      journeyItems.length - 1,
-      Math.max(0, Math.floor(value * journeyItems.length)),
-    )
-
-    setActiveJourneyIndex((currentIndex) => currentIndex === nextIndex ? currentIndex : nextIndex)
-  })
-
-  const currentJourneyIndex = reduceMotion ? journeyItems.length - 1 : activeJourneyIndex
+  const journeyInView = useInView(sectionRef, { amount: 0.18, once: true })
 
   return (
     <section
@@ -378,33 +392,31 @@ export function UserDayJourney() {
 
         <div className="user-journey__track-wrap">
           <div className="user-journey__track user-journey__track--horizontal" aria-hidden="true">
-            <motion.i style={{ scaleX: reduceMotion ? 1 : smoothProgress }} />
-            <motion.b
-              className="user-journey__route-spark"
-              style={{ left: reduceMotion ? '100%' : routePosition }}
+            <motion.i
+              initial={reduceMotion ? false : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: reduceMotion ? 0 : 1.2, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
           <div className="user-journey__track user-journey__track--vertical" aria-hidden="true">
-            <motion.i style={{ scaleY: reduceMotion ? 1 : smoothProgress }} />
-            <motion.b
-              className="user-journey__route-spark"
-              style={{ top: reduceMotion ? '100%' : routePosition }}
+            <motion.i
+              initial={reduceMotion ? false : { scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: reduceMotion ? 0 : 1.15, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
 
           <ol className="user-journey__list">
             {journeyItems.map((item, index) => {
-              const isActive = index === currentJourneyIndex
-              const isPassed = index <= currentJourneyIndex
-
               return (
                 <motion.li
-                  className={`user-journey__item ${item.icon === 'flame' ? 'user-journey__item--flow' : ''} ${isPassed ? 'user-journey__item--passed' : ''} ${isActive ? 'user-journey__item--active' : ''}`}
+                  className={`user-journey__item ${item.icon === 'flame' ? 'user-journey__item--flow' : ''} ${journeyInView ? 'user-journey__item--passed' : ''}`}
                   key={item.title}
-                  aria-current={isActive ? 'step' : undefined}
                   initial={reduceMotion ? false : { opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false, amount: 0.48 }}
+                  viewport={{ once: true, amount: 0.42 }}
                   transition={{ duration: reduceMotion ? 0 : 0.62, delay: reduceMotion ? 0 : index * 0.11, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <motion.span
@@ -418,21 +430,7 @@ export function UserDayJourney() {
                     <i />
                   </motion.span>
 
-                  <motion.article
-                    className="user-journey__card"
-                    initial={false}
-                    animate={journeyInView && !reduceMotion ? {
-                      x: [0, index % 2 === 0 ? 1.5 : -1.5, 0, index % 2 === 0 ? -1 : 1, 0],
-                      y: [0, -4, 0, 2, 0],
-                      rotate: [0, index % 2 === 0 ? 0.16 : -0.16, 0, index % 2 === 0 ? -0.1 : 0.1, 0],
-                    } : { x: 0, y: 0, rotate: 0 }}
-                    transition={journeyInView && !reduceMotion ? {
-                      duration: 8.4 + index * 0.45,
-                      delay: 0.9 + index * 0.12,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    } : { duration: 0.35 }}
-                  >
+                  <motion.article className="user-journey__card">
                     <div className="user-journey__card-top">
                       <time>{item.time}</time>
                       <span>{String(index + 1).padStart(2, '0')}</span>

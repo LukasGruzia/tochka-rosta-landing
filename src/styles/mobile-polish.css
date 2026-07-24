@@ -1505,19 +1505,46 @@
     line-height: 1.52;
   }
 
+  .mobile-flow__day-complete {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 -2px;
+    padding: 10px 12px;
+    border: 1px solid rgba(141, 255, 53, 0.16);
+    border-radius: 12px;
+    color: #cfe6c9;
+    background: rgba(103, 194, 58, 0.045);
+    font-size: 10px;
+    font-weight: 720;
+  }
+
+  .mobile-flow__day-complete i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8dff35;
+    box-shadow: 0 0 10px rgba(141, 255, 53, 0.7);
+  }
+
   .mobile-flow__streak {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(94px, 112px) minmax(0, 1fr);
+    grid-template-areas:
+      "label label"
+      "flame days"
+      "flame bonus";
     align-items: center;
     justify-content: center;
-    gap: 14px;
+    column-gap: 20px;
+    row-gap: 8px;
     min-height: 0;
     height: auto;
     margin-top: 22px;
-    padding: 26px 24px;
+    padding: 24px 20px;
     overflow: hidden;
-    text-align: center;
+    text-align: left;
     border: 1px solid rgba(141, 255, 53, 0.14);
     border-radius: 21px;
     background: linear-gradient(135deg, rgba(103, 194, 58, 0.09), rgba(255, 255, 255, 0.025));
@@ -1544,15 +1571,20 @@
   }
 
   .mobile-flow__streak .mobile-flow__streak-label {
+    grid-area: label;
+    margin-bottom: 8px;
     color: var(--green-bright);
     font-size: 12px;
     font-weight: 780;
     line-height: 1;
     letter-spacing: 0.15em;
+    text-align: center;
     text-transform: uppercase;
   }
 
   .mobile-flow__streak strong {
+    grid-area: days;
+    align-self: end;
     margin: 0;
     color: #f4f8f4;
     font-size: clamp(34px, 10vw, 44px);
@@ -1563,6 +1595,8 @@
   }
 
   .mobile-flow__streak small {
+    grid-area: bonus;
+    align-self: start;
     margin: 0;
     color: #a5b4a9;
     font-size: 15px;
@@ -1570,13 +1604,14 @@
   }
 
   .mobile-flow__flame {
+    grid-area: flame;
     position: relative;
     top: auto;
     right: auto;
     z-index: 2;
-    width: 120px;
-    max-width: 130px;
-    height: 128px;
+    width: 108px;
+    max-width: 112px;
+    height: 118px;
     flex-shrink: 0;
     pointer-events: none;
     transform-origin: 50% 88%;
@@ -1717,14 +1752,16 @@
   }
 
   .mobile-flow__streak {
-    gap: 13px;
-    padding: 24px 18px;
+    grid-template-columns: minmax(90px, 104px) minmax(0, 1fr);
+    column-gap: 18px;
+    row-gap: 8px;
+    padding: 22px 17px;
   }
 
   .mobile-flow__flame {
     right: auto;
-    width: 116px;
-    height: 124px;
+    width: 102px;
+    height: 114px;
   }
 
   .qr-mobile__phone {

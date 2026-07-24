@@ -17,21 +17,23 @@ type FlowFlameProps = {
 type FlowTimelineProps = {
   active?: boolean
   rewards?: FlowReward[]
+  currentDays?: number
   className?: string
 }
 
 type FlowExperienceProps = {
   rewards?: FlowReward[]
   currentDays?: number
+  dayComplete?: boolean
   className?: string
 }
 
 const defaultRewards: FlowReward[] = [
-  { days: 3, unit: 'дня', reward: 'Бонус +5%' },
-  { days: 7, unit: 'дней', reward: 'Напиток в подарок' },
-  { days: 14, unit: 'дней', reward: 'Скидка 10%' },
-  { days: 30, unit: 'дней', reward: 'Особый подарок' },
-  { days: 60, unit: 'дней', reward: 'VIP-статус' },
+  { days: 1, unit: 'день', reward: 'Старт серии' },
+  { days: 3, unit: 'дня', reward: 'Первый ритм' },
+  { days: 7, unit: 'дней', reward: 'Неделя в потоке' },
+  { days: 14, unit: 'дней', reward: '+10% к бонусам' },
+  { days: 30, unit: 'дней', reward: 'Стабильная привычка' },
 ]
 
 const sparkSettings = [
@@ -123,7 +125,12 @@ export function FlowFlame({ active: controlledActive, className = '' }: FlowFlam
   )
 }
 
-export function FlowTimeline({ active: controlledActive, rewards = defaultRewards, className = '' }: FlowTimelineProps) {
+export function FlowTimeline({
+  active: controlledActive,
+  rewards = defaultRewards,
+  currentDays = 7,
+  className = '',
+}: FlowTimelineProps) {
   const timelineRef = useRef<HTMLDivElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
   const isInView = useInView(timelineRef, { amount: 0.3, once: false, margin: '-5% 0px -5% 0px' })
@@ -144,10 +151,11 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
       <ol className="flow-timeline__list">
         {rewards.map((item, index) => {
           const delay = timing(index)
+          const isReached = item.days <= currentDays
 
           return (
             <motion.li
-              className="flow-timeline__stage"
+              className={`flow-timeline__stage ${isReached ? 'is-reached' : ''}`}
               key={`${item.days}-${item.reward}`}
               initial={false}
               animate={{ opacity: active ? 1 : 0.42, x: active ? 0 : -5 }}
@@ -171,7 +179,7 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
                 <motion.span
                   className="flow-timeline__check"
                   initial={false}
-                  animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0.35 }}
+                  animate={{ opacity: active && isReached ? 1 : 0, scale: active && isReached ? 1 : 0.35 }}
                   transition={{ duration: reduceMotion ? 0 : 0.32, delay: active ? delay + 0.08 : 0, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Checkmark />
@@ -185,6 +193,7 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
               <div className="flow-timeline__reward">
                 <small>{String(index + 1).padStart(2, '0')}</small>
                 <p>{item.reward}</p>
+                {isReached && item.days > 1 && <span>Открыто · демо</span>}
               </div>
             </motion.li>
           )
@@ -194,7 +203,7 @@ export function FlowTimeline({ active: controlledActive, rewards = defaultReward
   )
 }
 
-function MobileFlowExperience({ rewards, currentDays, className }: Required<FlowExperienceProps>) {
+function MobileFlowExperience({ rewards, currentDays, dayComplete, className }: Required<FlowExperienceProps>) {
   const milestones = rewards.map(({ days }) => days)
   const displayedDays = Math.max(currentDays, 14)
 
@@ -208,9 +217,11 @@ function MobileFlowExperience({ rewards, currentDays, className }: Required<Flow
     >
       <header className="mobile-flow__intro">
         <span>ПОТОК</span>
-        <h3>Держи ритм каждый день.</h3>
-        <p>Отмечай питание, собирай дни подряд и получай награды за стабильность.</p>
+        <h3>Регулярность превращается в результат.</h3>
+        <p>Закрывай дни питания, сохраняй серию и открывай награды за стабильность.</p>
       </header>
+
+      {dayComplete && <div className="mobile-flow__day-complete"><i /> День закрыт. Поток продолжается.</div>}
 
       <section className="mobile-flow__streak" aria-label={`Текущий поток — ${displayedDays} дней`}>
         <span className="mobile-flow__streak-label">Серия активна</span>
@@ -247,7 +258,12 @@ function MobileFlowExperience({ rewards, currentDays, className }: Required<Flow
   )
 }
 
-function DesktopFlowExperience({ rewards = defaultRewards, currentDays = 7, className = '' }: FlowExperienceProps) {
+function DesktopFlowExperience({
+  rewards = defaultRewards,
+  currentDays = 7,
+  dayComplete = false,
+  className = '',
+}: FlowExperienceProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
   const isInView = useInView(rootRef, { amount: 0.32, once: false, margin: '-6% 0px -6% 0px' })
@@ -262,7 +278,7 @@ function DesktopFlowExperience({ rewards = defaultRewards, currentDays = 7, clas
         <div className="flow-experience__status">
           <span><i /> Серия активна</span>
           <strong>{currentDays} дней</strong>
-          <p>Движение к новой награде</p>
+          <p>{dayComplete ? 'День закрыт. Поток продолжается.' : 'Движение к новой награде'}</p>
         </div>
       </div>
 
@@ -271,20 +287,25 @@ function DesktopFlowExperience({ rewards = defaultRewards, currentDays = 7, clas
           <span>Путь наград</span>
           <small>FLOW / 01</small>
         </div>
-        <FlowTimeline active={active} rewards={rewards} />
+        <FlowTimeline active={active} rewards={rewards} currentDays={currentDays} />
       </div>
     </div>
   )
 }
 
-export function FlowExperience({ rewards = defaultRewards, currentDays = 7, className = '' }: FlowExperienceProps) {
+export function FlowExperience({
+  rewards = defaultRewards,
+  currentDays = 7,
+  dayComplete = false,
+  className = '',
+}: FlowExperienceProps) {
   const isMobile = useIsMobile()
 
   if (isMobile) {
-    return <MobileFlowExperience rewards={rewards} currentDays={currentDays} className={className} />
+    return <MobileFlowExperience rewards={rewards} currentDays={currentDays} dayComplete={dayComplete} className={className} />
   }
 
-  return <DesktopFlowExperience rewards={rewards} currentDays={currentDays} className={className} />
+  return <DesktopFlowExperience rewards={rewards} currentDays={currentDays} dayComplete={dayComplete} className={className} />
 }
 
 export default FlowExperience

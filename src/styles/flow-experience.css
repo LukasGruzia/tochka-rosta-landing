@@ -374,6 +374,25 @@
   line-height: 1.35;
 }
 
+.flow-timeline__reward > span {
+  margin-left: auto;
+  padding: 5px 7px;
+  border: 1px solid rgba(141, 255, 53, 0.15);
+  border-radius: 999px;
+  color: rgba(141, 255, 53, 0.6);
+  background: rgba(141, 255, 53, 0.04);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.flow-timeline__stage:not(.is-reached) .flow-timeline__days strong,
+.flow-timeline__stage:not(.is-reached) .flow-timeline__reward p {
+  color: #68716a;
+}
+
 @keyframes flowExperienceScan {
   0%, 14% { opacity: 0; transform: translateX(0) skewX(-14deg); }
   28% { opacity: 1; }

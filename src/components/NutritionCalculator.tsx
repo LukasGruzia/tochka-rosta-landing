@@ -316,6 +316,9 @@ export function NutritionResultPanel({
       </div>
 
       <p className="nutrition-result__recommendation">{result.recommendation}</p>
+      <p className="nutrition-result__journey-message">
+        <i /> Расчёт готов. Ниже — пример дня из ассортимента «Точки Роста».
+      </p>
 
       <div className="nutrition-result__plan-head">
         <div>
@@ -348,7 +351,7 @@ export function NutritionResultPanel({
 
       <div className="nutrition-result__actions">
         <button type="button" onClick={onEdit}>Изменить данные</button>
-        <button type="button" onClick={onShowFood}>Посмотреть блюда <span aria-hidden="true">→</span></button>
+        <button type="button" onClick={onShowFood}>Показать пример рациона <span aria-hidden="true">→</span></button>
       </div>
       <p className="nutrition-result__note">MVP-демонстрация. Точный рацион зависит от состава и размера порций.</p>
     </div>
