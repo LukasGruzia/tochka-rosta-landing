@@ -93,7 +93,7 @@ export function EcosystemSection() {
           viewport={{ once: false, amount: 0.48 }}
           transition={{ duration: reduceMotion ? 0 : 0.9, ease }}
         >
-          <span className="ecosystem-heading__eyebrow"><i /> 04 / 10</span>
+          <span className="ecosystem-heading__eyebrow"><i /> 04 / 11</span>
           <h2 id="ecosystem-title">
             <span>Магазин, приложение</span>
             <span>и твой план на день.</span>

@@ -18,9 +18,10 @@ const DEFAULT_STORY_CHAPTERS: StoryChapter[] = [
   { id: 'location', number: '05', label: 'Локация' },
   { id: 'qr', number: '06', label: 'QR-сценарий' },
   { id: 'app', number: '07', label: 'Приложение' },
-  { id: 'food', number: '08', label: 'Блюда' },
-  { id: 'flow', number: '09', label: 'Поток' },
-  { id: 'final', number: '10', label: 'Баланс' },
+  { id: 'rhythm', number: '08', label: 'Ритм' },
+  { id: 'food', number: '09', label: 'Блюда' },
+  { id: 'flow', number: '10', label: 'Поток' },
+  { id: 'final', number: '11', label: 'Баланс' },
 ]
 
 type BrandPreloaderProps = {

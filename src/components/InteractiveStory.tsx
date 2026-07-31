@@ -238,7 +238,7 @@ export function InteractiveHowItWorks({
           viewport={{ once: false, amount: 0.55 }}
           transition={{ duration: reduceMotion ? 0 : 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="section-index">03 / 10</span>
+          <span className="section-index">03 / 11</span>
           <span className="eyebrow"><i /> Три шага</span>
           <h2 id="interactive-how-title">Как это работает</h2>
           <p>Цель, расчёт и готовые блюда. Без таблиц и догадок.</p>

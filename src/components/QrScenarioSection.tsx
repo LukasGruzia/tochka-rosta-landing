@@ -6,6 +6,7 @@ import caesarFood from '../assets/food/caesar.png'
 import iphoneBack from '../assets/phone/iphone-17-pro-back-premium.png'
 import caesarFoodMobile from '../assets/mobile/food/caesar.jpg'
 import iphoneBackMobile from '../assets/mobile/iphone-17-pro-back-mobile.png'
+import { RhythmQRHint } from '../features/rhythm/components/RhythmQRHint'
 import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/qr-scenario.css'
 
@@ -93,6 +94,7 @@ function ProductScreen({ imageSrc = caesarFood, isAdded, onAdd }: ProductScreenP
 
       <div className="qr-product-screen__image">
         <img src={imageSrc} loading="lazy" decoding="async" alt="Салат Цезарь с курицей" />
+        <RhythmQRHint />
         <div><span>Много белка</span><span>Лёгкий обед</span></div>
       </div>
 
@@ -188,7 +190,7 @@ function DesktopQrScenarioSection({ isAdded = false, onAdd = () => undefined }: 
           viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.75, ease }}
         >
-          <span className="section-index">06 / 10</span>
+          <span className="section-index">06 / 11</span>
           <span className="eyebrow"><i /> QR-сценарий</span>
           <h2 id="qr-scenario-title">Сканируешь блюдо.<br /><em>Видишь всё.</em></h2>
           <p>QR-код открывает состав, КБЖУ, цену и место блюда в твоём рационе.</p>
@@ -255,7 +257,7 @@ function MobileQrScenarioSection({ isAdded = false, onAdd = () => undefined }: Q
     >
       <div className="container">
         <header className="qr-mobile__heading">
-          <span className="section-index">06 / 10</span>
+          <span className="section-index">06 / 11</span>
           <span className="eyebrow"><i /> QR-сценарий</span>
           <h2 id="qr-mobile-title">Сканируешь блюдо.<br /><em>Видишь всё.</em></h2>
           <p>QR-код открывает состав, КБЖУ, цену и место блюда в твоём рационе.</p>
