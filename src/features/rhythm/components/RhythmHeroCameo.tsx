@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RhythmCharacter } from './RhythmCharacter'
+import { RhythmStage } from './RhythmStage'
 
 export function RhythmHeroCameo() {
   const [active, setActive] = useState(false)
@@ -13,7 +13,7 @@ export function RhythmHeroCameo() {
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
     >
-      <RhythmCharacter state="supportive" size="small" loading="eager" decorative />
+      <RhythmStage state="supportive" size="small" loading="eager" decorative />
       <span>Ритм рядом</span>
       <p>Помогу выбрать следующий шаг.</p>
     </button>

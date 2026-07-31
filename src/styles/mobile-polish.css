@@ -1628,8 +1628,8 @@
     pointer-events: none;
   }
 
-  .mobile-flow__rhythm .rhythm-character__aura { inset: 10%; }
-  .mobile-flow__rhythm .rhythm-character__shadow { bottom: 4%; }
+  .mobile-flow__rhythm .rhythm-stage__glow { inset: 10%; }
+  .mobile-flow__rhythm .rhythm-stage__shadow { bottom: 4%; }
 
   .mobile-flow__flame::before {
     content: "";

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RhythmCharacter } from './RhythmCharacter'
+import { RhythmStage } from './RhythmStage'
 
 export function RhythmFooterEasterEgg() {
   const [active, setActive] = useState(false)
@@ -13,7 +13,7 @@ export function RhythmFooterEasterEgg() {
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
     >
-      <RhythmCharacter state="supportive" size="small" animated decorative />
+      <RhythmStage state="supportive" size="small" animated decorative />
       <span>Увидимся в Потоке.</span>
     </button>
   )

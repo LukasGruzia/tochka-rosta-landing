@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { RhythmCharacter } from '../features/rhythm/components/RhythmCharacter'
+import { RhythmStage } from '../features/rhythm/components/RhythmStage'
 import type { RhythmState } from '../features/rhythm/config/rhythmAssets'
 import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/flow-experience.css'
@@ -242,7 +242,7 @@ function MobileFlowExperience({ rewards, currentDays, dayComplete, className }: 
 
       <section className="mobile-flow__streak" aria-label={`Текущий поток — ${displayedDays} дней`}>
         <span className="mobile-flow__streak-label">Серия активна</span>
-        <RhythmCharacter className="mobile-flow__rhythm" state={rhythmStateForDays(displayedDays)} size="small" animated decorative />
+        <RhythmStage className="mobile-flow__rhythm" state={rhythmStateForDays(displayedDays)} size="small" animated decorative />
         <strong>{displayedDays} дней</strong>
         <small>+10% к бонусам</small>
       </section>
@@ -293,7 +293,7 @@ function DesktopFlowExperience({
       <div className="flow-experience__signal">
         <div className="flow-experience__rhythm" data-days={previewDays}>
           <span className="flow-experience__rhythm-halo" aria-hidden="true" />
-          <RhythmCharacter state={rhythmStateForDays(previewDays)} size="medium" animated={active} />
+          <RhythmStage state={rhythmStateForDays(previewDays)} size="medium" animated={active} />
         </div>
         <div className="flow-experience__status">
           <span><i /> Серия активна</span>

@@ -1,7 +1,4 @@
-.rhythm-character {
-  --rhythm-look-x: 0px;
-  --rhythm-look-y: 0px;
-  --rhythm-look-r: 0deg;
+.rhythm-stage {
   position: relative;
   display: grid;
   place-items: center;
@@ -10,12 +7,12 @@
   isolation: isolate;
 }
 
-.rhythm-character--large { width: min(100%, 540px); }
-.rhythm-character--medium { width: min(100%, 340px); }
-.rhythm-character--small { width: 150px; }
-.rhythm-character--tiny { flex: 0 0 62px; width: 62px; }
+.rhythm-stage--large { width: min(100%, 540px); }
+.rhythm-stage--medium { width: min(100%, 340px); }
+.rhythm-stage--small { width: 150px; }
+.rhythm-stage--tiny { flex: 0 0 62px; width: 62px; }
 
-.rhythm-character__aura {
+.rhythm-stage__glow {
   position: absolute;
   z-index: -2;
   inset: 17%;
@@ -24,7 +21,7 @@
   box-shadow: 0 0 62px rgba(37, 208, 122, .11);
 }
 
-.rhythm-character__shadow {
+.rhythm-stage__shadow {
   position: absolute;
   z-index: -1;
   left: 27%;
@@ -36,24 +33,67 @@
   filter: blur(12px);
 }
 
-.rhythm-character__pointer-layer {
+.rhythm-stage__orbit {
+  position: absolute;
+  inset: 2.8%;
+  border: 1px solid rgba(53, 255, 166, .12);
+  border-radius: 50%;
+  box-shadow: inset 0 0 70px rgba(37, 208, 122, .035);
+}
+
+.rhythm-stage__orbit::before,
+.rhythm-stage__orbit::after { content: ""; position: absolute; border-radius: inherit; border: 1px solid rgba(214, 168, 79, .08); }
+.rhythm-stage__orbit::before { inset: 10%; }
+.rhythm-stage__orbit::after { inset: 21%; border-color: rgba(53, 255, 166, .09); }
+
+.rhythm-stage__message { position: relative; z-index: 2; }
+
+.rhythm-character {
+  --rhythm-look-x: 0px;
+  --rhythm-look-y: 0px;
+  --rhythm-look-r: 0deg;
+  --rhythm-offset-x: 0px;
+  --rhythm-offset-y: 0px;
+  --rhythm-state-scale: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  isolation: isolate;
+}
+
+.rhythm-character__position-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%) translate3d(var(--rhythm-offset-x), var(--rhythm-offset-y), 0) scale(var(--rhythm-state-scale));
+  transform-origin: center center;
+}
+
+.rhythm-character__pointer-layer {
+  position: absolute;
+  inset: 0;
   transform: translate3d(var(--rhythm-look-x), var(--rhythm-look-y), 0) rotate(var(--rhythm-look-r));
   transition: transform .34s var(--ease);
   will-change: transform;
 }
 
-.rhythm-character__image-shell { display: block; width: 100%; }
-.rhythm-character img { display: block; width: 100%; height: auto; object-fit: contain; }
-.rhythm-character.is-animated.rhythm-character--idle img,
-.rhythm-character.is-animated.rhythm-character--supportive img,
-.rhythm-character.is-animated.rhythm-character--caring img { animation: rhythmBreathe 3.8s ease-in-out infinite; }
-.rhythm-character.is-animated.rhythm-character--thinking img { animation: rhythmThink 4s ease-in-out infinite; }
-.rhythm-character.is-animated.rhythm-character--food img,
-.rhythm-character.is-animated.rhythm-character--advice img { animation: rhythmOffer 3.6s ease-in-out infinite; }
-.rhythm-character.is-animated.rhythm-character--motivated img,
-.rhythm-character.is-animated.rhythm-character--happy img,
-.rhythm-character.is-animated.rhythm-character--celebrating img { animation: rhythmHappy 3.5s ease-in-out infinite; }
+.rhythm-character__image-shell,
+.rhythm-character__animation-layer { position: absolute; inset: 0; transform-origin: center center; }
+.rhythm-character img { position: absolute; left: 50%; top: 50%; display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; transform: translate(-50%, -50%); transform-origin: center center; }
+.rhythm-character.is-animated.rhythm-character--idle .rhythm-character__animation-layer,
+.rhythm-character.is-animated.rhythm-character--supportive .rhythm-character__animation-layer,
+.rhythm-character.is-animated.rhythm-character--caring .rhythm-character__animation-layer { animation: rhythmBreathe 3.8s ease-in-out infinite; }
+.rhythm-character.is-animated.rhythm-character--thinking .rhythm-character__animation-layer { animation: rhythmThink 4s ease-in-out infinite; }
+.rhythm-character.is-animated.rhythm-character--food .rhythm-character__animation-layer,
+.rhythm-character.is-animated.rhythm-character--advice .rhythm-character__animation-layer { animation: rhythmOffer 3.6s ease-in-out infinite; }
+.rhythm-character.is-animated.rhythm-character--motivated .rhythm-character__animation-layer,
+.rhythm-character.is-animated.rhythm-character--happy .rhythm-character__animation-layer,
+.rhythm-character.is-animated.rhythm-character--celebrating .rhythm-character__animation-layer { animation: rhythmHappy 3.5s ease-in-out infinite; }
 
 @keyframes rhythmBreathe { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-4px) scaleY(1.008); } }
 @keyframes rhythmThink { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-3px) rotate(-.7deg); } }
@@ -104,11 +144,6 @@
 .rhythm-story { display: grid; grid-template-columns: minmax(400px, .92fr) minmax(460px, 1.08fr); align-items: start; gap: clamp(54px, 7vw, 110px); }
 .rhythm-story__visual { min-height: 1500px; }
 .rhythm-story__visual-sticky { position: sticky; top: 112px; display: grid; justify-items: center; min-height: 700px; padding: 12px 0 34px; }
-.rhythm-story__orbit { position: absolute; top: 8%; left: 50%; width: min(95%, 510px); aspect-ratio: 1; transform: translateX(-50%); border: 1px solid rgba(53, 255, 166, .12); border-radius: 50%; box-shadow: inset 0 0 70px rgba(37, 208, 122, .035); }
-.rhythm-story__orbit::before,
-.rhythm-story__orbit::after { content: ""; position: absolute; border-radius: inherit; border: 1px solid rgba(214, 168, 79, .08); }
-.rhythm-story__orbit::before { inset: 10%; }
-.rhythm-story__orbit::after { inset: 21%; border-color: rgba(53, 255, 166, .09); }
 .rhythm-story__visual .rhythm-message-glass { width: min(92%, 460px); margin-top: -38px; }
 
 .rhythm-app-slice {
@@ -175,19 +210,19 @@
   background: none;
   cursor: pointer;
 }
-.rhythm-hero-cameo .rhythm-character { width: 126px; transform-origin: bottom; animation: rhythmHeroWave .9s var(--ease) 1.35s both; }
+.rhythm-hero-cameo .rhythm-stage { width: 126px; transform-origin: bottom; animation: rhythmHeroWave .9s var(--ease) 1.35s both; }
 .rhythm-hero-cameo > span { position: absolute; right: -8px; bottom: 9px; padding: 7px 9px; color: #cdd6d0; font-size: 9px; font-weight: 730; border: 1px solid rgba(53,255,166,.2); border-radius: 10px; background: rgba(5,13,8,.87); }
 .rhythm-hero-cameo > p { position: absolute; left: 56%; bottom: 42px; width: 184px; margin: 0; padding: 10px 12px; color: #dfe8e2; font-size: 11px; line-height: 1.4; text-align: left; border: 1px solid rgba(53,255,166,.18); border-radius: 12px; background: rgba(5,14,9,.92); box-shadow: 0 18px 44px rgba(0,0,0,.35); opacity: 0; transform: translate(-4px, 6px); pointer-events: none; transition: .32s var(--ease); }
 .rhythm-hero-cameo.is-active > p { opacity: 1; transform: translate(0,0); }
 @keyframes rhythmHeroWave { from { opacity: 0; transform: translateY(18px) rotate(-4deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
 
 .rhythm-qr-hint { position: absolute; top: 8px; right: 7px; width: 154px; margin: 0; padding: 6px 7px 6px 4px; gap: 4px; border-radius: 11px; background: linear-gradient(145deg, rgba(11,32,20,.94), rgba(4,13,8,.9)); box-shadow: 0 10px 24px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.04); }
-.rhythm-qr-hint .rhythm-character { flex-basis: 34px; width: 34px; }
+.rhythm-qr-hint .rhythm-stage { flex-basis: 34px; width: 34px; }
 .rhythm-qr-hint span { font-size: 6px; }
 .rhythm-qr-hint p { margin-top: 2px; font-size: 8px; line-height: 1.25; }
 
 .rhythm-calculator-message { margin: 18px 0; }
-.rhythm-calculator-message .rhythm-character { flex-basis: 74px; width: 74px; }
+.rhythm-calculator-message .rhythm-stage { flex-basis: 74px; width: 74px; }
 .rhythm-calculator-message p { font-size: 15px; }
 
 footer { border-top: 1px solid rgba(255,255,255,.055); }
@@ -205,9 +240,9 @@ footer { border-top: 1px solid rgba(255,255,255,.055); }
   background: none;
   cursor: pointer;
 }
-.rhythm-footer-egg .rhythm-character { position: absolute; top: 0; left: 23px; width: 90px; transition: transform .4s var(--ease); }
+.rhythm-footer-egg .rhythm-stage { position: absolute; top: 0; left: 23px; width: 90px; transition: transform .4s var(--ease); }
 .rhythm-footer-egg > span { position: absolute; top: 8px; left: 50%; width: max-content; padding: 7px 10px; color: #dbe5de; font-size: 10px; border: 1px solid rgba(53,255,166,.18); border-radius: 10px; background: rgba(5,14,9,.93); opacity: 0; transform: translate(-50%, 8px); transition: .32s var(--ease); }
-.rhythm-footer-egg.is-active .rhythm-character { transform: translateY(-13px); }
+.rhythm-footer-egg.is-active .rhythm-stage { transform: translateY(-13px); }
 .rhythm-footer-egg.is-active > span { opacity: 1; transform: translate(-50%, -18px); }
 
 @media (max-width: 1080px) {
@@ -221,7 +256,7 @@ footer { border-top: 1px solid rgba(255,255,255,.055); }
   .rhythm-story { grid-template-columns: 1fr; gap: 24px; }
   .rhythm-story__visual { min-height: auto; }
   .rhythm-story__visual-sticky { position: relative; top: auto; min-height: auto; padding-bottom: 20px; }
-  .rhythm-story__visual .rhythm-character { width: min(72vw, 390px); }
+  .rhythm-story__visual .rhythm-stage { width: min(72vw, 390px); }
   .rhythm-story__visual .rhythm-message-glass { margin-top: -30px; }
   .rhythm-app-slice { margin-bottom: 10px; }
   .rhythm-stages { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -235,8 +270,7 @@ footer { border-top: 1px solid rgba(255,255,255,.055); }
   .rhythm-section__heading h2 { font-size: clamp(43px, 13vw, 58px); }
   .rhythm-section__heading > strong { margin-top: 16px; font-size: 19px; line-height: 1.25; }
   .rhythm-section__heading > p { margin-top: 16px; font-size: 15px; line-height: 1.65; }
-  .rhythm-story__visual .rhythm-character { width: min(82vw, 310px); }
-  .rhythm-story__orbit { width: min(88vw, 330px); }
+  .rhythm-story__visual .rhythm-stage { width: min(82vw, 310px); }
   .rhythm-story__visual .rhythm-message-glass { width: 100%; margin-top: -23px; }
   .rhythm-app-slice { width: 100%; }
   .rhythm-features { grid-template-columns: 1fr; gap: 8px; }
@@ -247,16 +281,16 @@ footer { border-top: 1px solid rgba(255,255,255,.055); }
   .rhythm-stage-glass h3 { margin-top: 11px; font-size: 21px; }
   .rhythm-stage-glass p { margin-top: 10px; font-size: 14px; }
   .rhythm-section__seo-copy { font-size: 12px; }
-  .rhythm-calculator-message .rhythm-character { flex-basis: 58px; width: 58px; }
+  .rhythm-calculator-message .rhythm-stage { flex-basis: 58px; width: 58px; }
   .rhythm-calculator-message p { font-size: 13px; }
   .rhythm-footer-egg { top: -62px; height: 74px; }
-  .rhythm-footer-egg .rhythm-character { left: 31px; width: 74px; }
+  .rhythm-footer-egg .rhythm-stage { left: 31px; width: 74px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rhythm-character img,
-  .rhythm-hero-cameo .rhythm-character { animation: none !important; }
+  .rhythm-character__animation-layer,
+  .rhythm-hero-cameo .rhythm-stage { animation: none !important; }
   .rhythm-character__pointer-layer,
-  .rhythm-footer-egg .rhythm-character,
+  .rhythm-footer-egg .rhythm-stage,
   .rhythm-footer-egg > span { transition-duration: .01ms !important; }
 }

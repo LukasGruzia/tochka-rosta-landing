@@ -98,7 +98,7 @@
   min-height: 238px;
 }
 
-.flow-experience__rhythm .rhythm-character { width: 190px; }
+.flow-experience__rhythm .rhythm-stage { width: 190px; }
 
 .flow-experience__rhythm-halo {
   position: absolute;
@@ -439,7 +439,7 @@
 
   .flow-experience__signal { padding-inline: 10px; }
   .flow-experience__rhythm { width: 160px; min-height: 204px; }
-  .flow-experience__rhythm .rhythm-character { width: 158px; }
+  .flow-experience__rhythm .rhythm-stage { width: 158px; }
   .flow-experience__journey { padding-left: 22px; }
   .flow-flame { width: 136px; }
 }
@@ -467,7 +467,7 @@
   }
 
   .flow-experience__rhythm { width: 154px; min-height: 190px; }
-  .flow-experience__rhythm .rhythm-character { width: 150px; }
+  .flow-experience__rhythm .rhythm-stage { width: 150px; }
 
   .flow-experience__signal::after {
     right: 25%;

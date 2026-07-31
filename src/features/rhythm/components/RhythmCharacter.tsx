@@ -1,8 +1,9 @@
-import { useRef, type MouseEvent } from 'react'
+import { useRef, type CSSProperties, type MouseEvent } from 'react'
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion'
 import { getRhythmCompactAsset, rhythmAssets, type RhythmState } from '../config/rhythmAssets'
+import { rhythmLayout } from '../config/rhythmLayout'
 
-type RhythmCharacterProps = {
+export type RhythmCharacterProps = {
   state?: RhythmState
   size?: 'tiny' | 'small' | 'medium' | 'large'
   animated?: boolean
@@ -40,6 +41,12 @@ export function RhythmCharacter({
   const isInView = useInView(rootRef, { once: false, amount: 0.16, margin: '80px 0px 80px 0px' })
   const canAnimate = animated && isInView && !reduceMotion
   const imageSizes = size === 'tiny' ? '72px' : size === 'small' ? '170px' : size === 'medium' ? '360px' : '(max-width: 700px) 310px, 540px'
+  const layout = rhythmLayout[state]
+  const layoutStyle = {
+    '--rhythm-offset-x': `${layout.offsetX}px`,
+    '--rhythm-offset-y': `${layout.offsetY}px`,
+    '--rhythm-state-scale': layout.scale,
+  } as CSSProperties
 
   const handlePointerMove = (event: MouseEvent<HTMLDivElement>) => {
     if (!window.matchMedia('(pointer: fine)').matches || reduceMotion) return
@@ -72,31 +79,34 @@ export function RhythmCharacter({
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : stateLabels[state]}
       aria-hidden={decorative || undefined}
+      style={layoutStyle}
     >
-      <span className="rhythm-character__aura" aria-hidden="true" />
-      <span className="rhythm-character__shadow" aria-hidden="true" />
-      <div className="rhythm-character__pointer-layer">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            className="rhythm-character__image-shell"
-            key={state}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98, y: -5 }}
-            transition={{ duration: reduceMotion ? 0.12 : 0.42, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <img
-              src={rhythmAssets[state]}
-              srcSet={`${getRhythmCompactAsset(state)} 400w, ${rhythmAssets[state]} 800w`}
-              sizes={imageSizes}
-              width="800"
-              height="800"
-              loading={loading}
-              decoding="async"
-              alt=""
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div className="rhythm-character__position-layer">
+        <div className="rhythm-character__pointer-layer">
+          <AnimatePresence mode="sync" initial={false}>
+            <motion.div
+              className="rhythm-character__image-shell"
+              key={state}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98, y: -5 }}
+              transition={{ duration: reduceMotion ? 0.12 : 0.42, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="rhythm-character__animation-layer">
+                <img
+                  src={rhythmAssets[state]}
+                  srcSet={`${getRhythmCompactAsset(state)} 400w, ${rhythmAssets[state]} 800w`}
+                  sizes={imageSizes}
+                  width="800"
+                  height="800"
+                  loading={loading}
+                  decoding="async"
+                  alt=""
+                />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   )

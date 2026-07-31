@@ -1,5 +1,5 @@
 import type { RhythmState } from '../config/rhythmAssets'
-import { RhythmCharacter } from './RhythmCharacter'
+import { RhythmStage } from './RhythmStage'
 
 type RhythmMessageCardProps = {
   message: string
@@ -12,7 +12,7 @@ type RhythmMessageCardProps = {
 export function RhythmMessageCard({ message, state = 'supportive', eyebrow = 'Ритм · сейчас', action, className = '' }: RhythmMessageCardProps) {
   return (
     <div className={`rhythm-message-glass ${className}`.trim()}>
-      <RhythmCharacter state={state} size="tiny" animated={false} decorative />
+      <RhythmStage state={state} size="tiny" animated={false} decorative />
       <div>
         <span>{eyebrow}</span>
         <p>{message}</p>

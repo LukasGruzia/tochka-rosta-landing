@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { RhythmCharacter } from '../components/RhythmCharacter'
+import { RhythmStage } from '../components/RhythmStage'
 import { RhythmMessageCard } from '../components/RhythmMessageCard'
 import { RhythmStageCard } from '../components/RhythmStageCard'
 import { rhythmFeatures, rhythmStages } from '../config/rhythmContent'
@@ -24,8 +24,7 @@ export function RhythmSection() {
         <div className="rhythm-story">
           <div className="rhythm-story__visual">
             <div className="rhythm-story__visual-sticky">
-              <span className="rhythm-story__orbit" aria-hidden="true" />
-              <RhythmCharacter state={activeStage.state} size="large" animated />
+              <RhythmStage state={activeStage.state} size="large" animated orbit />
               <motion.div
                 key={activeStage.id}
                 initial={reduceMotion ? false : { opacity: 0, y: 10 }}
