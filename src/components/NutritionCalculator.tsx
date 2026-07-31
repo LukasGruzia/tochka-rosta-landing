@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import { motion } from 'framer-motion'
 import { foodShowcase, type FoodShowcaseItem } from '../data/foodShowcase'
+import { RhythmMessageCard } from '../features/rhythm/components/RhythmMessageCard'
 import {
   calculateNutrition,
   type Gender,
@@ -316,6 +317,12 @@ export function NutritionResultPanel({
       </div>
 
       <p className="nutrition-result__recommendation">{result.recommendation}</p>
+      <RhythmMessageCard
+        className="rhythm-calculator-message"
+        state="supportive"
+        eyebrow="Ритм · ориентир готов"
+        message="Готово. Это твой текущий ориентир — его всегда можно изменить."
+      />
       <p className="nutrition-result__journey-message">
         <i /> Расчёт готов. Ниже — пример дня из ассортимента «Точки Роста».
       </p>

@@ -1,5 +1,7 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { RhythmCharacter } from '../features/rhythm/components/RhythmCharacter'
+import type { RhythmState } from '../features/rhythm/config/rhythmAssets'
 import { useIsMobile } from '../hooks/useIsMobile'
 import '../styles/flow-experience.css'
 
@@ -19,6 +21,7 @@ type FlowTimelineProps = {
   rewards?: FlowReward[]
   currentDays?: number
   className?: string
+  onPreviewDays?: (days: number) => void
 }
 
 type FlowExperienceProps = {
@@ -34,7 +37,15 @@ const defaultRewards: FlowReward[] = [
   { days: 7, unit: 'дней', reward: 'Неделя в потоке' },
   { days: 14, unit: 'дней', reward: '+10% к бонусам' },
   { days: 30, unit: 'дней', reward: 'Стабильная привычка' },
+  { days: 60, unit: 'дней', reward: 'Золотой ритм' },
 ]
+
+function rhythmStateForDays(days: number): RhythmState {
+  if (days >= 60) return 'celebrating'
+  if (days >= 14) return 'motivated'
+  if (days >= 7) return 'supportive'
+  return 'idle'
+}
 
 const sparkSettings = [
   { left: 20, drift: -7, travel: -50, duration: 2.7, delay: 0.2 },
@@ -130,6 +141,7 @@ export function FlowTimeline({
   rewards = defaultRewards,
   currentDays = 7,
   className = '',
+  onPreviewDays,
 }: FlowTimelineProps) {
   const timelineRef = useRef<HTMLDivElement>(null)
   const reduceMotion = Boolean(useReducedMotion())
@@ -157,6 +169,11 @@ export function FlowTimeline({
             <motion.li
               className={`flow-timeline__stage ${isReached ? 'is-reached' : ''}`}
               key={`${item.days}-${item.reward}`}
+              tabIndex={0}
+              aria-label={`${item.days} ${item.unit}: ${item.reward}`}
+              onMouseEnter={() => onPreviewDays?.(item.days)}
+              onFocus={() => onPreviewDays?.(item.days)}
+              onClick={() => onPreviewDays?.(item.days)}
               initial={false}
               animate={{ opacity: active ? 1 : 0.42, x: active ? 0 : -5 }}
               transition={{ duration: reduceMotion ? 0 : 0.5, delay: active ? delay : 0, ease: [0.16, 1, 0.3, 1] }}
@@ -225,10 +242,7 @@ function MobileFlowExperience({ rewards, currentDays, dayComplete, className }: 
 
       <section className="mobile-flow__streak" aria-label={`Текущий поток — ${displayedDays} дней`}>
         <span className="mobile-flow__streak-label">Серия активна</span>
-        <span className="mobile-flow__flame" aria-hidden="true">
-          <i />
-          <b />
-        </span>
+        <RhythmCharacter className="mobile-flow__rhythm" state={rhythmStateForDays(displayedDays)} size="small" animated decorative />
         <strong>{displayedDays} дней</strong>
         <small>+10% к бонусам</small>
       </section>
@@ -265,20 +279,26 @@ function DesktopFlowExperience({
   className = '',
 }: FlowExperienceProps) {
   const rootRef = useRef<HTMLDivElement>(null)
+  const [previewDays, setPreviewDays] = useState(currentDays)
   const reduceMotion = Boolean(useReducedMotion())
   const isInView = useInView(rootRef, { amount: 0.32, once: false, margin: '-6% 0px -6% 0px' })
   const active = reduceMotion || isInView
 
+  useEffect(() => setPreviewDays(currentDays), [currentDays])
+
   return (
-    <div ref={rootRef} className={`flow-experience ${className}`.trim()}>
+    <div ref={rootRef} className={`flow-experience ${className}`.trim()} onMouseLeave={() => setPreviewDays(currentDays)}>
       <span className="flow-experience__scan" aria-hidden="true" />
 
       <div className="flow-experience__signal">
-        <FlowFlame active={active} />
+        <div className="flow-experience__rhythm" data-days={previewDays}>
+          <span className="flow-experience__rhythm-halo" aria-hidden="true" />
+          <RhythmCharacter state={rhythmStateForDays(previewDays)} size="medium" animated={active} />
+        </div>
         <div className="flow-experience__status">
           <span><i /> Серия активна</span>
-          <strong>{currentDays} дней</strong>
-          <p>{dayComplete ? 'День закрыт. Поток продолжается.' : 'Движение к новой награде'}</p>
+          <strong>{previewDays} дней</strong>
+          <p>{previewDays === currentDays && dayComplete ? 'День закрыт. Поток продолжается.' : previewDays === currentDays ? 'Движение к новой награде' : 'Предпросмотр этапа Потока'}</p>
         </div>
       </div>
 
@@ -287,7 +307,7 @@ function DesktopFlowExperience({
           <span>Путь наград</span>
           <small>FLOW / 01</small>
         </div>
-        <FlowTimeline active={active} rewards={rewards} currentDays={currentDays} />
+        <FlowTimeline active={active} rewards={rewards} currentDays={previewDays} onPreviewDays={setPreviewDays} />
       </div>
     </div>
   )

@@ -1319,6 +1319,7 @@
     position: absolute;
     inset: 0;
     overflow: hidden;
+    contain: paint;
     border-radius: 43px;
     transform: translateY(12px) scale(0.98);
     opacity: 0;
@@ -1618,6 +1619,18 @@
     animation: mobileFlowPulse 3.2s ease-in-out infinite;
   }
 
+  .mobile-flow__rhythm {
+    grid-area: flame;
+    position: relative;
+    z-index: 2;
+    width: 112px;
+    max-width: 112px;
+    pointer-events: none;
+  }
+
+  .mobile-flow__rhythm .rhythm-character__aura { inset: 10%; }
+  .mobile-flow__rhythm .rhythm-character__shadow { bottom: 4%; }
+
   .mobile-flow__flame::before {
     content: "";
     position: absolute;
@@ -1656,7 +1669,7 @@
 
   .mobile-flow__milestones {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 6px;
     margin-top: 14px;
   }

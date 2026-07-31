@@ -17,6 +17,9 @@ import { LiveFlowAppScreen, LiveFoodAppScreen } from '../components/LiveAppScree
 import LocationMap from '../components/LocationMap'
 import { PresentationMode } from '../components/PresentationMode'
 import { QrScenarioSection } from '../components/QrScenarioSection'
+import { RhythmFooterEasterEgg } from '../features/rhythm/components/RhythmFooterEasterEgg'
+import { RhythmHeroCameo } from '../features/rhythm/components/RhythmHeroCameo'
+import { RhythmSection } from '../features/rhythm/sections/RhythmSection'
 import { foodShowcase } from '../data/foodShowcase'
 import type { MealSlot } from '../data/mealPlans'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -44,6 +47,7 @@ const navItems = [
   ['ecosystem', 'Экосистема'],
   ['qr', 'QR'],
   ['app', 'Приложение'],
+  ['rhythm', 'Ритм'],
   ['flow', 'Поток'],
 ] as const
 
@@ -336,6 +340,7 @@ export function LandingPage() {
                 <span>Персональный путь</span>
                 <div><b>Данные</b><i /><b>Рацион</b><i /><b>Еда</b><i /><b>Поток</b></div>
               </div>
+              <RhythmHeroCameo />
             </motion.div>
           </div>
           <button className="scroll-cue" onClick={() => scrollTo('concept')} aria-label="Прокрутить к концепции"><span>Листай</span><i /></button>
@@ -343,7 +348,7 @@ export function LandingPage() {
 
         <section className="section concept" id="concept">
           <div className="container">
-            <span className="section-index" aria-hidden="true">01 / 10</span>
+            <span className="section-index" aria-hidden="true">01 / 11</span>
             <SectionHeading eyebrow="Концепция" title="Рацион, который не нужно считать вручную." text="Задаёшь цель. Получаешь норму и блюда на день." />
             <div className="concept-grid">
               {conceptCards.map(([number, title, text], index) => (
@@ -361,7 +366,7 @@ export function LandingPage() {
 
         <section className="section implementation" id="solution">
           <div className="container">
-            <span className="section-index section-index--center" aria-hidden="true">02 / 10</span>
+            <span className="section-index section-index--center" aria-hidden="true">02 / 11</span>
             <SectionHeading eyebrow="Решение" title="Цель → расчёт → готовые блюда." text="Четыре шага. Всё в одном ритме." align="center" />
             <div className="steps-line" aria-hidden="true">
               <motion.i
@@ -408,7 +413,7 @@ export function LandingPage() {
         <section className="section location section-tech-grid" id="location">
           <div className="container location-grid">
             <div>
-              <span className="section-index" aria-hidden="true">05 / 10</span>
+              <span className="section-index" aria-hidden="true">05 / 11</span>
               <SectionHeading eyebrow="Первая точка" title="Первый магазин — в Тюмени." text="ARSIB Tower — офисы, спорт и ежедневный трафик. Зайти за обедом легко." />
               <Reveal className="location-address">
                 <span className="location-pin"><i /></span>
@@ -426,7 +431,7 @@ export function LandingPage() {
 
         <section className="section app-section section-tech-grid" id="app" ref={appSectionRef}>
           <div className="container">
-            <span className="section-index section-index--center" aria-hidden="true">07 / 10</span>
+            <span className="section-index section-index--center" aria-hidden="true">07 / 11</span>
             <SectionHeading eyebrow="Приложение" title="Рацион из реальных блюд. В твоём ритме." text="Приложение считает норму, показывает блюда и помогает держать ритм без ручных подсчётов." align="center" />
             <motion.div className="phones-stage" style={isMobile ? undefined : { y: appStageY, scale: appStageScale }}>
               {!isMobile && (
@@ -467,11 +472,13 @@ export function LandingPage() {
           </div>
         </section>
 
+        <RhythmSection />
+
         <UserDayJourney />
 
         <section className="section food-section" id="food">
           <div className="container">
-            <span className="section-index" aria-hidden="true">08 / 10</span>
+            <span className="section-index" aria-hidden="true">09 / 11</span>
             <SectionHeading eyebrow="Ассортимент" title="Привычная еда — в полезной версии." text="Хинкали, боулы, салаты, десерты без сахара и напитки с высоким содержанием белка." />
             <div className="khinkali-showcase" ref={khinkaliSectionRef}>
               <Reveal className="khinkali-copy glass-card">
@@ -545,7 +552,7 @@ export function LandingPage() {
           <div className="container flow-grid">
             {!isMobile && (
               <div className="flow-copy">
-                <span className="section-index" aria-hidden="true">09 / 10</span>
+                <span className="section-index" aria-hidden="true">10 / 11</span>
                 <SectionHeading eyebrow="Система «Поток»" title="Регулярность превращается в результат." text="Закрывай дни питания, сохраняй серию и открывай награды за стабильность." />
                 <Reveal className="flow-current glass-card">
                   <div><small>Текущий поток</small><strong>{dayComplete ? 8 : 7} дней</strong></div>
@@ -571,6 +578,7 @@ export function LandingPage() {
       <PresentationMode active={presentationActive} isMobile={isMobile} onExit={exitPresentation} />
 
       <footer>
+        <RhythmFooterEasterEgg />
         <div className="container">
           <span>© 2026 Точка Роста</span>
           <span>Проект Луки Чихладзе, город Тюмень</span>
